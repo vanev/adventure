@@ -1,0 +1,8 @@
+{
+  "name": "adventure",
+  "version": "0.0.1",
+  "description": "A little adventure.",
+  "main": "index.js",
+  "repository": "https://github.com/vanev/adventure",
+  "author": "Evan Siegel <siegel.evan@gmail.com>"
+}
