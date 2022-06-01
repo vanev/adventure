@@ -2,9 +2,14 @@
   "name": "adventure",
   "version": "0.0.1",
   "description": "A little adventure.",
-  "main": "index.js",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "repository": "https://github.com/vanev/adventure",
   "author": "Evan Siegel <siegel.evan@gmail.com>",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
   "devDependencies": {
     "parcel": "^2.6.0"
   }
