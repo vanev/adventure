@@ -4,5 +4,8 @@
   "description": "A little adventure.",
   "main": "index.js",
   "repository": "https://github.com/vanev/adventure",
-  "author": "Evan Siegel <siegel.evan@gmail.com>"
+  "author": "Evan Siegel <siegel.evan@gmail.com>",
+  "devDependencies": {
+    "parcel": "^2.6.0"
+  }
 }
