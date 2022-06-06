@@ -1,8 +1,14 @@
 body {
-  background-color: darkslategrey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  background-color: #212529;
 }
 
-h1 {
-  color: papayawhip;
-  font-family: cursive;
+canvas {
+  border: 1px solid #6c757d;
 }
