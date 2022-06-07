@@ -9,6 +9,7 @@ import { State } from "../Game";
 import Menu, { Item } from "../Menu";
 import * as World from "../World";
 import Screen from "./Screen";
+import PauseScreen from "./PauseScreen";
 
 class WorldScreen implements Screen {
   goTo: (screen: Screen) => void;
@@ -53,6 +54,10 @@ class WorldScreen implements Screen {
         case "Enter":
           const action = this.menu.action();
           action(this);
+          break;
+
+        case "Escape":
+          this.goTo(new PauseScreen(this.goTo, this));
           break;
       }
     });
