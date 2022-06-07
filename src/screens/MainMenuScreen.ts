@@ -3,6 +3,8 @@ import { Display } from "../Display";
 import { State } from "../Game";
 import Menu from "../Menu";
 import Screen from "./Screen";
+import { generate as generateWorld } from "../World";
+import WorldScreen from "./WorldScreen";
 
 class MainMenuScreen implements Screen {
   goTo: (screen: Screen) => void;
@@ -10,7 +12,7 @@ class MainMenuScreen implements Screen {
     {
       label: "New World",
       action: (screen) => {
-        console.warn("Not Implemented");
+        screen.goTo(new WorldScreen(screen.goTo, generateWorld()));
       },
     },
     {
