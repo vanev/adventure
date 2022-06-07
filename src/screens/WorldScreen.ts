@@ -9,6 +9,7 @@ import { State } from "../Game";
 import Menu, { Item } from "../Menu";
 import * as World from "../World";
 import Screen from "./Screen";
+import LocationScreen from "./LocationScreen";
 import PauseScreen from "./PauseScreen";
 
 class WorldScreen implements Screen {
@@ -28,7 +29,7 @@ class WorldScreen implements Screen {
         ([id, location]): Item<WorldScreen> => ({
           label: location.name,
           action: (screen) => {
-            console.warn("Not Implemented");
+            screen.goTo(new LocationScreen(this.goTo, world, id));
           },
         }),
       ),
