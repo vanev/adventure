@@ -23,8 +23,8 @@ export const distance = flow(subtract, magnitude);
 
 export const cardinalVectors: Record<Cardinal, Vector2> = {
   North: [0, -1],
-  East: [0, 1],
-  South: [1, 0],
+  East: [1, 0],
+  South: [0, 1],
   West: [-1, 0],
 };
 
