@@ -3,14 +3,16 @@ import { Matrix, fill, empty } from "../lib/Matrix";
 import { Location } from "./Location";
 import { Terrain, grass } from "./Terrain";
 import { Hero } from "./Hero";
+import { Clock, initial as initialClock } from "./Clock";
 
-export type { Terrain, Location, Hero };
+export type { Terrain, Location, Hero, Clock };
 
 export type World = {
   name: string;
   locations: Map<Id, Location>;
   terrain: Matrix<Terrain>;
   hero: Hero;
+  clock: Clock;
 };
 
 export const generate = (): World => ({
@@ -58,4 +60,5 @@ export const generate = (): World => ({
     symbol: "@",
     position: [0, 0],
   },
+  clock: initialClock,
 });

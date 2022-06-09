@@ -1,6 +1,7 @@
+import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
 import * as Matrix from "../lib/Matrix";
-import { cardinalNeighbors } from "../lib/Vector2";
+import { cardinalNeighbors, Vector2 } from "../lib/Vector2";
 import { Display } from "../Display";
 import { State } from "../Game";
 import * as World from "../World";
@@ -12,6 +13,7 @@ class LocationScreen implements Screen {
   goTo: (screen: Screen) => void;
   world: World.World;
   location: World.Location;
+  speed: number = 0;
 
   constructor(goTo: (screen: Screen) => void, world: World.World, id: Id) {
     this.goTo = goTo;
@@ -23,8 +25,20 @@ class LocationScreen implements Screen {
   }
 
   update = (state: State) => {
+    if (this.speed > 0) {
+      this.world.clock.sinceLastTick += state.tick.sinceLast;
+      if (this.world.clock.sinceLastTick > (1 / this.speed) * second) {
+        this.world.clock.current += 1;
+        this.world.clock.sinceLastTick = 0;
+      }
+    }
+
     state.keyboard.pressed.forEach((key) => {
       switch (key) {
+        case " ":
+          this.speed = this.speed === 0 ? 1 : 0;
+          break;
+
         case "ArrowUp":
           this.world.hero.position = cardinalNeighbors(
             this.world.hero.position,
@@ -79,6 +93,10 @@ class LocationScreen implements Screen {
       Color.LightWhite,
       "",
     );
+
+    display.drawText(0, 39, `Speed: ${this.speed}`);
+
+    display.drawText(10, 39, `Clock: ${this.world.clock.current}`);
   };
 }
 
