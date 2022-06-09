@@ -1,6 +1,5 @@
 import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
-import * as Matrix from "../lib/Matrix";
 import { cardinalNeighbors, Vector2 } from "../lib/Vector2";
 import { Display } from "../Display";
 import { State } from "../Game";
@@ -76,7 +75,7 @@ class LocationScreen implements Screen {
     const mapTop = 5;
     const mapLeft = 0;
 
-    Matrix.forEach((terrain: World.Terrain, [x, y]) => {
+    this.location.terrain.forEach((terrain, [x, y]) => {
       display.draw(
         x + mapLeft,
         y + mapTop,
@@ -84,7 +83,7 @@ class LocationScreen implements Screen {
         terrain.foregroundColor,
         terrain.backgroundColor,
       );
-    })(this.location.terrain);
+    });
 
     display.drawOver(
       this.world.hero.position[0] + mapLeft,

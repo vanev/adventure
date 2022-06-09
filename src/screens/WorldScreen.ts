@@ -2,7 +2,6 @@ import { pipe } from "fp-ts/lib/function";
 import { isNonEmpty, map } from "fp-ts/lib/Array";
 import { toArray } from "fp-ts/lib/Map";
 import { Id, Ord as idOrd } from "../lib/Id";
-import * as Matrix from "../lib/Matrix";
 import Color from "../Color";
 import { Display } from "../Display";
 import { State } from "../Game";
@@ -78,7 +77,7 @@ class WorldScreen implements Screen {
     const mapTop = 2;
     const mapLeft = 30;
 
-    Matrix.forEach((terrain: World.Terrain, [x, y]) => {
+    this.world.terrain.forEach((terrain, [x, y]) => {
       display.draw(
         x + mapLeft,
         y + mapTop,
@@ -86,7 +85,7 @@ class WorldScreen implements Screen {
         terrain.foregroundColor,
         terrain.backgroundColor,
       );
-    })(this.world.terrain);
+    });
 
     this.locations.forEach(([id, location], index) => {
       display.drawOver(

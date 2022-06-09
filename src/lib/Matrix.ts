@@ -8,82 +8,69 @@ import {
 } from "./Vector2";
 import { Cardinal, Ordinal, Direction } from "./Direction";
 
-export type Matrix<T> = {
+class Matrix<T> {
   width: number;
   height: number;
-  cells: Array<T>;
-};
+  cells: Array<T> = [];
 
-export const empty = <T>([x, y]: Vector2): Matrix<T> => ({
-  width: x,
-  height: y,
-  cells: [],
-});
+  constructor([width, height]: Vector2) {
+    this.width = width;
+    this.height = height;
+  }
 
-export const fill =
-  <T>(f: (point: Vector2) => T) =>
-  (matrix: Matrix<T>): Matrix<T> => {
-    for (let x = 0; x < matrix.width; x++) {
-      for (let y = 0; y < matrix.height; y++) {
+  private _indexOf = ([x, y]: Vector2) => x + y * this.width;
+
+  set = (point: Vector2, value: T): Matrix<T> => {
+    this.cells[this._indexOf(point)] = value;
+    return this;
+  };
+
+  get = (point: Vector2) => this.cells[this._indexOf(point)];
+
+  fill = (iterator: (point: Vector2) => T): Matrix<T> => {
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
         const point: Vector2 = [x, y];
-        set(point)(f(point))(matrix);
+        this.set(point, iterator(point));
       }
     }
-    return matrix;
+    return this;
   };
 
-export const set =
-  ([x, y]: Vector2) =>
-  <T>(value: T) =>
-  (matrix: Matrix<T>): Matrix<T> => {
-    matrix.cells[x + y * matrix.width] = value;
-    return matrix;
-  };
-
-export const get =
-  ([x, y]: Vector2) =>
-  <T>(matrix: Matrix<T>): T | void => {
-    return matrix.cells[x + y * matrix.width];
-  };
-
-export const getCardinalNeighbors =
-  (point: Vector2) =>
-  <T>(matrix: Matrix<T>): Record<Cardinal, T | void> =>
+  cardinalNeighbors = (point: Vector2): Record<Cardinal, T | void> =>
     pipe(
       point,
       cardinalNeighbors,
-      map((neighbor) => get(neighbor)(matrix)),
+      map((neighbor) => this.get(neighbor)),
     );
 
-export const getOrdinalNeighbors =
-  (point: Vector2) =>
-  <T>(matrix: Matrix<T>): Record<Ordinal, T | void> =>
+  ordinalNeighbors = (point: Vector2): Record<Ordinal, T | void> =>
     pipe(
       point,
       ordinalNeighbors,
-      map((neighbor) => get(neighbor)(matrix)),
+      map((neighbor) => this.get(neighbor)),
     );
 
-export const getAllNeighbors =
-  (point: Vector2) =>
-  <T>(matrix: Matrix<T>): Record<Direction, T | void> =>
+  allNeighbors = (point: Vector2): Record<Direction, T | void> =>
     pipe(
       point,
       allNeighbors,
-      map((neighbor) => get(neighbor)(matrix)),
+      map((neighbor) => this.get(neighbor)),
     );
 
-export const forEach =
-  <T>(iterator: (value: T, point: Vector2) => void) =>
-  (matrix: Matrix<T>) => {
-    for (let x = 0; x < matrix.width; x++) {
-      for (let y = 0; y < matrix.height; y++) {
+  forEach = (iterator: (value: T, point: Vector2) => void): Matrix<T> => {
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
         const point: Vector2 = [x, y];
 
-        const value = get(point)(matrix);
+        const value = this.get(point);
         if (!value) throw new Error("Value not found!");
 
         iterator(value, point);
       }
     }
+    return this;
   };
+}
+
+export default Matrix;

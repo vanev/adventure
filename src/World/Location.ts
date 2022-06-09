@@ -1,4 +1,4 @@
-import { Matrix } from "../lib/Matrix";
+import Matrix from "../lib/Matrix";
 import { Vector2 } from "../lib/Vector2";
 import { Terrain } from "./Terrain";
 
