@@ -77,7 +77,7 @@ class WorldScreen implements Screen {
     const mapTop = 2;
     const mapLeft = 30;
 
-    this.world.terrain.forEach((terrain, [x, y]) => {
+    this.world.terrain.forEach((terrain, { x, y }) => {
       display.draw(
         x + mapLeft,
         y + mapTop,
@@ -89,8 +89,8 @@ class WorldScreen implements Screen {
 
     this.locations.forEach(([id, location], index) => {
       display.drawOver(
-        location.position[0] + mapLeft,
-        location.position[1] + mapTop,
+        location.position.x + mapLeft,
+        location.position.y + mapTop,
         location.symbol,
         this.menu.selected === index ? Color.BrightPurple : Color.LightWhite,
         "",

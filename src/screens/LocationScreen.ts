@@ -1,6 +1,5 @@
 import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
-import { cardinalNeighbors, Vector2 } from "../lib/Vector2";
 import { Display } from "../Display";
 import { State } from "../Game";
 import * as World from "../World";
@@ -39,27 +38,23 @@ class LocationScreen implements Screen {
           break;
 
         case "ArrowUp":
-          this.world.hero.position = cardinalNeighbors(
-            this.world.hero.position,
-          ).North;
+          this.world.hero.position =
+            this.world.hero.position.cardinalNeighbors().North;
           break;
 
         case "ArrowDown":
-          this.world.hero.position = cardinalNeighbors(
-            this.world.hero.position,
-          ).South;
+          this.world.hero.position =
+            this.world.hero.position.cardinalNeighbors().South;
           break;
 
         case "ArrowLeft":
-          this.world.hero.position = cardinalNeighbors(
-            this.world.hero.position,
-          ).West;
+          this.world.hero.position =
+            this.world.hero.position.cardinalNeighbors().West;
           break;
 
         case "ArrowRight":
-          this.world.hero.position = cardinalNeighbors(
-            this.world.hero.position,
-          ).East;
+          this.world.hero.position =
+            this.world.hero.position.cardinalNeighbors().East;
           break;
 
         case "Escape":
@@ -75,7 +70,7 @@ class LocationScreen implements Screen {
     const mapTop = 5;
     const mapLeft = 0;
 
-    this.location.terrain.forEach((terrain, [x, y]) => {
+    this.location.terrain.forEach((terrain, { x, y }) => {
       display.draw(
         x + mapLeft,
         y + mapTop,
@@ -86,8 +81,8 @@ class LocationScreen implements Screen {
     });
 
     display.drawOver(
-      this.world.hero.position[0] + mapLeft,
-      this.world.hero.position[1] + mapTop,
+      this.world.hero.position.x + mapLeft,
+      this.world.hero.position.y + mapTop,
       this.world.hero.symbol,
       Color.LightWhite,
       "",

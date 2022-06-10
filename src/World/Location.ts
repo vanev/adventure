@@ -1,5 +1,5 @@
 import Matrix from "../lib/Matrix";
-import { Vector2 } from "../lib/Vector2";
+import Vector2 from "../lib/Vector2";
 import { Terrain } from "./Terrain";
 
 export type Location = {
