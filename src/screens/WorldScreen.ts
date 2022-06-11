@@ -6,18 +6,18 @@ import Color from "../Color";
 import { Display } from "../Display";
 import { State } from "../Game";
 import Menu, { Item } from "../Menu";
-import * as World from "../World";
+import World, { Location } from "../World";
 import Screen from "./Screen";
 import LocationScreen from "./LocationScreen";
 import PauseScreen from "./PauseScreen";
 
 class WorldScreen implements Screen {
   goTo: (screen: Screen) => void;
-  world: World.World;
+  world: World;
   menu: Menu<WorldScreen>;
-  locations: Array<[Id, World.Location]>;
+  locations: Array<[Id, Location]>;
 
-  constructor(goTo: (screen: Screen) => void, world: World.World) {
+  constructor(goTo: (screen: Screen) => void, world: World) {
     this.goTo = goTo;
     this.world = world;
     this.locations = pipe(world.locations, toArray(idOrd));

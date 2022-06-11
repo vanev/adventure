@@ -2,18 +2,18 @@ import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
 import { Display } from "../Display";
 import { State } from "../Game";
-import * as World from "../World";
+import World, { Location } from "../World";
 import Screen from "./Screen";
 import PauseScreen from "./PauseScreen";
 import Color from "../Color";
 
 class LocationScreen implements Screen {
   goTo: (screen: Screen) => void;
-  world: World.World;
-  location: World.Location;
+  world: World;
+  location: Location;
   speed: number = 0;
 
-  constructor(goTo: (screen: Screen) => void, world: World.World, id: Id) {
+  constructor(goTo: (screen: Screen) => void, world: World, id: Id) {
     this.goTo = goTo;
     this.world = world;
 
