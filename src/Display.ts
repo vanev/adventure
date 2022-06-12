@@ -3,6 +3,8 @@ import Color from "./Color";
 
 export type Display = ROT.Display;
 
+ROT.Display.Rect.cache = true;
+
 const DISPLAY_CONFIG = {
   width: 100,
   height: 40,
