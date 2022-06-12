@@ -29,8 +29,8 @@ class Game {
 
       // Debug Stuff
       const fps = this.state.tick.fps.toFixed(0);
-      const fpsText = `%c{${Color.DarkGrey}}${fps}`;
-      this.display.drawText(98, 0, fpsText);
+      const fpsText = `${fps}`;
+      this.display.drawText(96, 0, fpsText);
 
       keyboard.clear();
 

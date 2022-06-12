@@ -60,7 +60,7 @@ class PauseScreen implements Screen {
       display.drawText(5, index + 5, item.label);
 
       if (this.menu.selected === index) {
-        display.drawOver(3, index + 5, "›", Color.LightWhite, "");
+        display.drawOver(3, index + 5, "›", Color.LightWhite);
       }
     });
   };
