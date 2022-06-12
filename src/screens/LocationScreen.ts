@@ -85,7 +85,6 @@ class LocationScreen implements Screen {
       this.world.hero.position.y + mapTop,
       this.world.hero.symbol,
       Color.LightWhite,
-      "",
     );
 
     display.drawText(0, 39, `Speed: ${this.speed}`);

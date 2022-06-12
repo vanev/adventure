@@ -1,6 +1,8 @@
 import { pipe } from "fp-ts/lib/function";
 import { isNonEmpty, map } from "fp-ts/lib/Array";
 import { toArray } from "fp-ts/lib/Map";
+import Rectangle from "../lib/Rectangle";
+import Vector2 from "../lib/Vector2";
 import { Id, Ord as idOrd } from "../lib/Id";
 import Color from "../Color";
 import { Display } from "../Display";
@@ -70,17 +72,16 @@ class WorldScreen implements Screen {
       display.drawText(5, index + 5, item.label);
 
       if (selected) {
-        display.drawOver(3, index + 5, "›", Color.LightWhite, "");
+        display.drawOver(3, index + 5, "›", Color.LightWhite);
       }
     });
 
-    const mapTop = 2;
-    const mapLeft = 30;
+    const mapRect = new Rectangle(new Vector2(30, 2), new Vector2(30, 30));
 
-    this.world.terrain.forEach((terrain, { x, y }) => {
+    this.world.terrain.forEach((terrain, point) => {
       display.draw(
-        x + mapLeft,
-        y + mapTop,
+        point.x + mapRect.origin.x,
+        point.y + mapRect.origin.y,
         terrain.symbol,
         terrain.foregroundColor,
         terrain.backgroundColor,
@@ -89,11 +90,10 @@ class WorldScreen implements Screen {
 
     this.locations.forEach(([id, location], index) => {
       display.drawOver(
-        location.position.x + mapLeft,
-        location.position.y + mapTop,
+        location.position.x + mapRect.origin.x,
+        location.position.y + mapRect.origin.y,
         location.symbol,
         this.menu.selected === index ? Color.BrightPurple : Color.LightWhite,
-        "",
       );
     });
   };

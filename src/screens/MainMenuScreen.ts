@@ -53,7 +53,7 @@ class MainMenuScreen implements Screen {
       display.drawText(5, index + 5, item.label);
 
       if (selected) {
-        display.drawOver(3, index + 5, "›", Color.LightWhite, "");
+        display.drawOver(3, index + 5, "›", Color.LightWhite);
       }
     });
   };
