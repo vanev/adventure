@@ -1303,11 +1303,6 @@ resolve-from@^4.0.0:
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-4.0.0.tgz#4abcd852ad32dd7baabfe9b40e00a36db5f392e6"
   integrity sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==
 
-rot-js@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/rot-js/-/rot-js-2.2.0.tgz#75f794822a2052e6f5a7c8a5594da44d7bc79528"
-  integrity sha512-DlqvRiOl3LnwTuActd+nMcj9tt9uycPaDezb2bJVDqXMdPJ2dkO3daJ5c/q+fYcKvIY9P5FUl9Tp24llClUFig==
-
 safe-buffer@^5.0.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
