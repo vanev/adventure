@@ -1,18 +1,19 @@
 import Color from "../Color";
-import { Display } from "../Display";
-import { State } from "../Game";
+import Game from "../Game";
 import Menu from "../Menu";
 import Screen from "./Screen";
 import { generate as generateWorld } from "../World";
 import WorldScreen from "./WorldScreen";
 
 class MainMenuScreen implements Screen {
-  goTo: (screen: Screen) => void;
+  game: Game;
   menu: Menu<MainMenuScreen> = new Menu([
     {
       label: "New World",
       action: (screen) => {
-        screen.goTo(new WorldScreen(screen.goTo, generateWorld()));
+        screen.game.handleScreenChange(
+          new WorldScreen(screen.game, generateWorld()),
+        );
       },
     },
     {
@@ -23,12 +24,12 @@ class MainMenuScreen implements Screen {
     },
   ]);
 
-  constructor(goTo: (screen: Screen) => void) {
-    this.goTo = goTo;
+  constructor(game: Game) {
+    this.game = game;
   }
 
-  update = (state: State) => {
-    state.keyboard.pressed.forEach((key) => {
+  update = () => {
+    this.game.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
           this.menu.down();
@@ -46,14 +47,14 @@ class MainMenuScreen implements Screen {
     });
   };
 
-  render = (display: Display) => {
-    display.drawText(5, 2, "Adventure!");
+  render = () => {
+    this.game.ui.display.drawText(5, 2, "Adventure!");
 
     this.menu.forEach((item, selected, index) => {
-      display.drawText(5, index + 5, item.label);
+      this.game.ui.display.drawText(5, index + 5, item.label);
 
       if (selected) {
-        display.drawOver(3, index + 5, "›", Color.LightWhite);
+        this.game.ui.display.drawOver(3, index + 5, "›", Color.LightWhite);
       }
     });
   };

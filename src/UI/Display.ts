@@ -1,4 +1,4 @@
-import Color from "./Color";
+import Color from "../Color";
 
 type Plan = {
   content: string;
@@ -17,7 +17,7 @@ const fromKey = (key: string): [number, number] => {
   return [parseInt(x, 10), parseInt(y, 10)];
 };
 
-type Config = {
+export type Config = {
   width: number;
   height: number;
   fontSize: number;
@@ -26,7 +26,7 @@ type Config = {
   foreground: Color;
 };
 
-export class Display {
+class Display {
   width: number;
   height: number;
   tileWidth: number;
@@ -165,22 +165,4 @@ export class Display {
   };
 }
 
-const DISPLAY_CONFIG = {
-  width: 100,
-  height: 40,
-  fontSize: 16,
-  fontFamily: "Fira Code, monospace",
-  background: Color.DarkBlack,
-  foreground: Color.LightWhite,
-};
-
-export const initialize = (parent: HTMLElement): Display => {
-  const display = new Display(DISPLAY_CONFIG);
-
-  const container = display.getContainer();
-  if (!container) throw new Error("Display Container Element Not Found");
-
-  parent.appendChild(container);
-
-  return display;
-};
+export default Display;

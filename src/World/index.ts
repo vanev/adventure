@@ -36,7 +36,7 @@ class World {
 }
 
 export const generate = (): World => {
-  const world = new World("Greenfield", new Vector2(40, 30));
+  const world = new World("Greenfield", new Vector2(50, 50));
 
   world.fillTerrain(() => grass);
 

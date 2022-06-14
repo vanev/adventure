@@ -1,10 +1,9 @@
-import { Display } from "../Display";
-import * as Game from "../Game";
+import Game from "../Game";
 
 interface Screen {
-  goTo(screen: Screen): void;
-  update(gameState: Game.State): void;
-  render(display: Display): void;
+  game: Game;
+  update(): void;
+  render(): void;
 }
 
 export default Screen;
