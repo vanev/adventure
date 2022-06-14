@@ -1,5 +1,6 @@
 import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
+import { cardinalNeighbors } from "../lib/Vector2";
 import Game from "../Game";
 import World, { Location } from "../World";
 import Screen from "./Screen";
@@ -37,23 +38,27 @@ class LocationScreen implements Screen {
           break;
 
         case "ArrowUp":
-          this.world.hero.position =
-            this.world.hero.position.cardinalNeighbors().North;
+          this.world.hero.position = cardinalNeighbors(
+            this.world.hero.position,
+          ).North;
           break;
 
         case "ArrowDown":
-          this.world.hero.position =
-            this.world.hero.position.cardinalNeighbors().South;
+          this.world.hero.position = cardinalNeighbors(
+            this.world.hero.position,
+          ).South;
           break;
 
         case "ArrowLeft":
-          this.world.hero.position =
-            this.world.hero.position.cardinalNeighbors().West;
+          this.world.hero.position = cardinalNeighbors(
+            this.world.hero.position,
+          ).West;
           break;
 
         case "ArrowRight":
-          this.world.hero.position =
-            this.world.hero.position.cardinalNeighbors().East;
+          this.world.hero.position = cardinalNeighbors(
+            this.world.hero.position,
+          ).East;
           break;
 
         case "Escape":
@@ -67,7 +72,7 @@ class LocationScreen implements Screen {
     const mapTop = 5;
     const mapLeft = 0;
 
-    this.location.terrain.forEach((terrain, { x, y }) => {
+    this.location.terrain.forEach((terrain, [x, y]) => {
       this.game.ui.display.draw(
         x + mapLeft,
         y + mapTop,
@@ -78,8 +83,8 @@ class LocationScreen implements Screen {
     });
 
     this.game.ui.display.drawOver(
-      this.world.hero.position.x + mapLeft,
-      this.world.hero.position.y + mapTop,
+      this.world.hero.position[0] + mapLeft,
+      this.world.hero.position[1] + mapTop,
       this.world.hero.symbol,
       Color.LightWhite,
     );

@@ -1,59 +1,61 @@
 import { flow } from "fp-ts/lib/function";
 import { Cardinal, Ordinal, Direction } from "./Direction";
 
-class Vector2 {
-  x: number;
-  y: number;
+type Vector2 = [number, number];
 
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
+export const add = ([ax, ay]: Vector2, [bx, by]: Vector2): Vector2 => [
+  ax + bx,
+  ay + by,
+];
 
-  add = ({ x, y }: Vector2): Vector2 => new Vector2(this.x + x, this.y + y);
+export const subtract = ([ax, ay]: Vector2, [bx, by]: Vector2): Vector2 => [
+  ax - bx,
+  ay - by,
+];
 
-  subtract = ({ x, y }: Vector2): Vector2 =>
-    new Vector2(this.x - x, this.y - y);
+export const magnitude = ([x, y]: Vector2): number =>
+  Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-  magnitude = (): number =>
-    Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+export const equals = ([ax, ay]: Vector2, [bx, by]: Vector2): boolean =>
+  ax === bx && ay === by;
 
-  equals = ({ x, y }: Vector2): boolean => this.x === x && this.y === y;
+export const distance = flow(subtract, magnitude);
 
-  distance = flow(this.subtract, this.magnitude);
+export const cardinalNeighbors = (
+  vector: Vector2,
+): Record<Cardinal, Vector2> => ({
+  North: add(vector, cardinalVectors.North),
+  East: add(vector, cardinalVectors.East),
+  South: add(vector, cardinalVectors.South),
+  West: add(vector, cardinalVectors.West),
+});
 
-  cardinalNeighbors = (): Record<Cardinal, Vector2> => ({
-    North: this.add(cardinalVectors.North),
-    East: this.add(cardinalVectors.East),
-    South: this.add(cardinalVectors.South),
-    West: this.add(cardinalVectors.West),
-  });
+export const ordinalNeighbors = (
+  vector: Vector2,
+): Record<Ordinal, Vector2> => ({
+  Northeast: add(vector, ordinalVectors.Northeast),
+  Southeast: add(vector, ordinalVectors.Southeast),
+  Northwest: add(vector, ordinalVectors.Northwest),
+  Southwest: add(vector, ordinalVectors.Southwest),
+});
 
-  ordinalNeighbors = (): Record<Ordinal, Vector2> => ({
-    Northeast: this.add(ordinalVectors.Northeast),
-    Southeast: this.add(ordinalVectors.Southeast),
-    Northwest: this.add(ordinalVectors.Northwest),
-    Southwest: this.add(ordinalVectors.Southwest),
-  });
-
-  allNeighbors = (): Record<Direction, Vector2> => ({
-    ...this.cardinalNeighbors(),
-    ...this.ordinalNeighbors(),
-  });
-}
+export const allNeighbors = (vector: Vector2): Record<Direction, Vector2> => ({
+  ...cardinalNeighbors(vector),
+  ...ordinalNeighbors(vector),
+});
 
 export const cardinalVectors: Record<Cardinal, Vector2> = {
-  North: new Vector2(0, -1),
-  East: new Vector2(1, 0),
-  South: new Vector2(0, 1),
-  West: new Vector2(-1, 0),
+  North: [0, -1],
+  East: [1, 0],
+  South: [0, 1],
+  West: [-1, 0],
 };
 
 export const ordinalVectors: Record<Ordinal, Vector2> = {
-  Northeast: cardinalVectors.North.add(cardinalVectors.East),
-  Southeast: cardinalVectors.South.add(cardinalVectors.East),
-  Southwest: cardinalVectors.South.add(cardinalVectors.West),
-  Northwest: cardinalVectors.North.add(cardinalVectors.West),
+  Northeast: add(cardinalVectors.North, cardinalVectors.East),
+  Southeast: add(cardinalVectors.North, cardinalVectors.East),
+  Southwest: add(cardinalVectors.North, cardinalVectors.West),
+  Northwest: add(cardinalVectors.North, cardinalVectors.West),
 };
 
 export const allVectors: Record<Direction, Vector2> = {
