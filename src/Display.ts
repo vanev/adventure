@@ -99,7 +99,10 @@ export class Display {
   };
 
   drawText = (x: number, y: number, content: string) => {
-    this.draw(x, y, content, this.foreground, this.background);
+    const characters = content.split("");
+    for (let i = 0; i < characters.length; i++) {
+      this.draw(x + i, y, characters[i], this.foreground, this.background);
+    }
   };
 
   drawOver = (
