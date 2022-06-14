@@ -1,5 +1,22 @@
 import Color from "./Color";
 
+type Plan = {
+  content: string;
+  background: Color;
+  foreground: Color;
+};
+
+const equals = (a: Plan, b: Plan): boolean =>
+  a.content === b.content &&
+  a.background === b.background &&
+  a.foreground === b.foreground;
+
+const toKey = (x: number, y: number): string => `${x},${y}`;
+const fromKey = (key: string): [number, number] => {
+  const [x, y] = key.split(",");
+  return [parseInt(x, 10), parseInt(y, 10)];
+};
+
 type Config = {
   width: number;
   height: number;
@@ -18,6 +35,9 @@ export class Display {
   context: CanvasRenderingContext2D;
   background: Color;
   foreground: Color;
+  changes: Record<string, Plan> = {};
+  current: Record<string, Plan> = {};
+  removals: Set<string> = new Set();
 
   constructor(config: Config) {
     this.canvas = document.createElement("canvas");
@@ -33,7 +53,7 @@ export class Display {
     const testHeight = 100;
     this.context.font = `${testHeight}px ${config.fontFamily}`;
     const testWidth = Math.ceil(this.context.measureText("W").width);
-    this.tileWidth = (this.tileHeight * testWidth) / testHeight;
+    this.tileWidth = Math.ceil((config.fontSize * testWidth) / testHeight);
 
     this.width = config.width;
     this.height = config.height;
@@ -46,6 +66,14 @@ export class Display {
 
     this.context.font = `${this.tileHeight}px ${config.fontFamily}`;
     this.context.textBaseline = "top";
+
+    this.context.fillStyle = this.background;
+    this.context.fillRect(
+      0,
+      0,
+      this.width * this.tileWidth,
+      this.height * this.tileHeight,
+    );
   }
 
   getContainer = (): HTMLElement => {
@@ -55,71 +83,82 @@ export class Display {
   draw = (
     x: number,
     y: number,
-    character: string,
-    foreground?: Color,
-    background?: Color,
+    content: string,
+    foreground: Color = this.foreground,
+    background: Color = this.background,
   ) => {
-    this.context.fillStyle = background || this.background;
-    this.context.fillRect(
-      x * this.tileWidth,
-      y * this.tileHeight,
-      this.tileWidth,
-      this.tileHeight,
-    );
-    this.context.fillStyle = foreground || this.foreground;
-    this.context.fillText(
-      character,
-      x * this.tileWidth,
-      Math.ceil(y * this.tileHeight),
-    );
+    const key = toKey(x, y);
+    this.removals.delete(key);
+    const plan = { content, foreground, background };
+    const currentPlan = this.current[key];
+    if (currentPlan && equals(plan, currentPlan)) {
+      delete this.changes[key];
+    } else {
+      this.changes[key] = plan;
+    }
   };
 
   drawText = (x: number, y: number, content: string) => {
-    this.context.fillStyle = this.background;
-    this.context.fillRect(
-      x * this.tileWidth,
-      y * this.tileHeight,
-      this.tileWidth,
-      this.tileHeight,
-    );
-    this.context.fillStyle = this.foreground;
-    this.context.fillText(
-      content,
-      x * this.tileWidth,
-      Math.ceil(y * this.tileHeight),
-    );
+    this.draw(x, y, content, this.foreground, this.background);
   };
 
   drawOver = (
     x: number,
     y: number,
-    character: string,
-    foreground?: Color,
-    background?: Color,
+    content: string,
+    foreground: Color = this.foreground,
+    background: Color = this.background,
   ) => {
-    this.context.fillStyle = background || this.background;
-    this.context.fillRect(
-      x * this.tileWidth,
-      y * this.tileHeight,
-      this.tileWidth,
-      this.tileHeight,
-    );
-    this.context.fillStyle = foreground || this.foreground;
-    this.context.fillText(
-      character,
-      x * this.tileWidth,
-      Math.ceil(y * this.tileHeight),
-    );
+    this.draw(x, y, content, foreground, background);
   };
 
-  clear = () => {
-    this.context.fillStyle = this.background;
-    this.context.fillRect(
-      0,
-      0,
-      this.width * this.tileWidth,
-      this.height * this.tileHeight,
-    );
+  render = () => {
+    for (const key of this.removals) {
+      const [x, y] = fromKey(key);
+
+      const current = this.current[key];
+
+      let length = current ? current.content.length : 1;
+      length = length > 1 ? length + 1 : length;
+
+      this.context.fillStyle = this.background;
+      this.context.fillRect(
+        x * this.tileWidth,
+        y * this.tileHeight,
+        this.tileWidth * length,
+        this.tileHeight,
+      );
+
+      delete this.current[key];
+    }
+
+    for (const [key, instruction] of Object.entries(this.changes)) {
+      const [x, y] = fromKey(key);
+
+      const current = this.current[key];
+
+      let length = current ? current.content.length : 1;
+      length = length > 1 ? length + 1 : length;
+
+      this.context.fillStyle = instruction.background;
+      this.context.fillRect(
+        x * this.tileWidth,
+        y * this.tileHeight,
+        this.tileWidth * length,
+        this.tileHeight,
+      );
+      this.context.fillStyle = instruction.foreground;
+      this.context.fillText(
+        instruction.content,
+        x * this.tileWidth,
+        y * this.tileHeight,
+      );
+
+      this.current[key] = instruction;
+      delete this.changes[key];
+    }
+
+    this.removals = new Set(Object.keys(this.current));
   };
 }
 
