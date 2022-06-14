@@ -11,9 +11,7 @@ class MainMenuScreen implements Screen {
     {
       label: "New World",
       action: (screen) => {
-        screen.game.handleScreenChange(
-          new WorldScreen(screen.game, generateWorld()),
-        );
+        screen.game.changeScreen(new WorldScreen(screen.game, generateWorld()));
       },
     },
     {
