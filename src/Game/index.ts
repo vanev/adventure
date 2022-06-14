@@ -1,5 +1,4 @@
-import { Display, initialize as initializeDisplay } from "../Display";
-import Color from "../Color";
+import UI from "../UI";
 import Screen from "../screens/Screen";
 import MainMenuScreen from "../screens/MainMenuScreen";
 import { State, initial as initialState } from "./State";
@@ -8,32 +7,30 @@ export type { State };
 
 class Game {
   state: State = initialState;
-  display: Display;
+  ui: UI;
   screen: Screen;
 
-  constructor(parentElement: HTMLElement) {
-    this.display = initializeDisplay(parentElement);
-    this.screen = new MainMenuScreen(this.handleScreenChange);
+  constructor(ui: UI) {
+    this.ui = ui;
+    this.screen = new MainMenuScreen(this);
   }
 
   start = () => {
     const loop = () => {
-      const { tick, keyboard } = this.state;
+      const { tick } = this.state;
 
       tick.update();
 
-      this.screen.update(this.state);
+      this.screen.update();
 
-      this.screen.render(this.display);
+      this.screen.render();
 
       // Debug Stuff
       const fps = this.state.tick.fps.toFixed(0);
       const fpsText = `${fps}`;
-      this.display.drawText(96, 0, fpsText);
+      this.ui.display.drawText(96, 0, fpsText);
 
-      this.display.render();
-
-      keyboard.clear();
+      this.ui.onTick();
 
       requestAnimationFrame(loop);
     };

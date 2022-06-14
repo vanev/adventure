@@ -1,20 +1,19 @@
 import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
-import { Display } from "../Display";
-import { State } from "../Game";
+import Game from "../Game";
 import World, { Location } from "../World";
 import Screen from "./Screen";
 import PauseScreen from "./PauseScreen";
 import Color from "../Color";
 
 class LocationScreen implements Screen {
-  goTo: (screen: Screen) => void;
+  game: Game;
   world: World;
   location: Location;
   speed: number = 0;
 
-  constructor(goTo: (screen: Screen) => void, world: World, id: Id) {
-    this.goTo = goTo;
+  constructor(game: Game, world: World, id: Id) {
+    this.game = game;
     this.world = world;
 
     const location = world.locations.get(id);
@@ -22,16 +21,16 @@ class LocationScreen implements Screen {
     this.location = location;
   }
 
-  update = (state: State) => {
+  update = () => {
     if (this.speed > 0) {
-      this.world.clock.sinceLastTick += state.tick.sinceLast;
+      this.world.clock.sinceLastTick += this.game.state.tick.sinceLast;
       if (this.world.clock.sinceLastTick > (1 / this.speed) * second) {
         this.world.clock.current += 1;
         this.world.clock.sinceLastTick = 0;
       }
     }
 
-    state.keyboard.pressed.forEach((key) => {
+    this.game.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case " ":
           this.speed = this.speed === 0 ? 1 : 0;
@@ -58,20 +57,20 @@ class LocationScreen implements Screen {
           break;
 
         case "Escape":
-          this.goTo(new PauseScreen(this.goTo, this));
+          this.game.handleScreenChange(new PauseScreen(this.game, this));
           break;
       }
     });
   };
 
-  render = (display: Display) => {
-    display.drawText(5, 2, this.location.name);
+  render = () => {
+    this.game.ui.display.drawText(5, 2, this.location.name);
 
     const mapTop = 5;
     const mapLeft = 0;
 
     this.location.terrain.forEach((terrain, { x, y }) => {
-      display.draw(
+      this.game.ui.display.draw(
         x + mapLeft,
         y + mapTop,
         terrain.symbol,
@@ -80,16 +79,16 @@ class LocationScreen implements Screen {
       );
     });
 
-    display.drawOver(
+    this.game.ui.display.drawOver(
       this.world.hero.position.x + mapLeft,
       this.world.hero.position.y + mapTop,
       this.world.hero.symbol,
       Color.LightWhite,
     );
 
-    display.drawText(0, 39, `Speed: ${this.speed}`);
+    this.game.ui.display.drawText(0, 39, `Speed: ${this.speed}`);
 
-    display.drawText(10, 39, `Clock: ${this.world.clock.current}`);
+    this.game.ui.display.drawText(10, 39, `Clock: ${this.world.clock.current}`);
   };
 }
 

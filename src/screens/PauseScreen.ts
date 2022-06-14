@@ -1,18 +1,17 @@
 import Color from "../Color";
-import { Display } from "../Display";
-import { State } from "../Game";
+import Game from "../Game";
 import Menu from "../Menu";
 import MainMenuScreen from "./MainMenuScreen";
 import Screen from "./Screen";
 
 class PauseScreen implements Screen {
-  goTo: (screen: Screen) => void;
+  game: Game;
   previousScreen: Screen;
   menu: Menu<PauseScreen> = new Menu([
     {
       label: "Continue",
       action: (screen) => {
-        screen.goTo(screen.previousScreen);
+        screen.game.handleScreenChange(screen.previousScreen);
       },
     },
     {
@@ -24,18 +23,18 @@ class PauseScreen implements Screen {
     {
       label: "Quit to Main Menu",
       action: (screen) => {
-        screen.goTo(new MainMenuScreen(screen.goTo));
+        screen.game.handleScreenChange(new MainMenuScreen(screen.game));
       },
     },
   ]);
 
-  constructor(goTo: (screen: Screen) => void, previousScreen: Screen) {
-    this.goTo = goTo;
+  constructor(game: Game, previousScreen: Screen) {
+    this.game = game;
     this.previousScreen = previousScreen;
   }
 
-  update = (state: State) => {
-    state.keyboard.pressed.forEach((key) => {
+  update = () => {
+    this.game.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
           this.menu.down();
@@ -53,14 +52,14 @@ class PauseScreen implements Screen {
     });
   };
 
-  render = (display: Display) => {
-    display.drawText(5, 2, "Paused...");
+  render = () => {
+    this.game.ui.display.drawText(5, 2, "Paused...");
 
     this.menu.items.forEach((item, index) => {
-      display.drawText(5, index + 5, item.label);
+      this.game.ui.display.drawText(5, index + 5, item.label);
 
       if (this.menu.selected === index) {
-        display.drawOver(3, index + 5, "›", Color.LightWhite);
+        this.game.ui.display.drawOver(3, index + 5, "›", Color.LightWhite);
       }
     });
   };
