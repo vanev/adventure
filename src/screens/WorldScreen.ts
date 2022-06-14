@@ -75,12 +75,12 @@ class WorldScreen implements Screen {
       }
     });
 
-    const mapRect = new Rectangle(new Vector2(30, 2), new Vector2(30, 30));
+    const mapRect = new Rectangle([30, 2], [30, 30]);
 
     this.world.terrain.forEach((terrain, point) => {
       this.game.ui.display.draw(
-        point.x + mapRect.origin.x,
-        point.y + mapRect.origin.y,
+        point[0] + mapRect.origin[0],
+        point[1] + mapRect.origin[1],
         terrain.symbol,
         terrain.foregroundColor,
         terrain.backgroundColor,
@@ -89,8 +89,8 @@ class WorldScreen implements Screen {
 
     this.locations.forEach(([id, location], index) => {
       this.game.ui.display.drawOver(
-        location.position.x + mapRect.origin.x,
-        location.position.y + mapRect.origin.y,
+        location.position[0] + mapRect.origin[0],
+        location.position[1] + mapRect.origin[1],
         location.symbol,
         this.menu.selected === index ? Color.BrightPurple : Color.LightWhite,
       );

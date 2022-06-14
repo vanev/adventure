@@ -36,33 +36,33 @@ class World {
 }
 
 export const generate = (): World => {
-  const world = new World("Greenfield", new Vector2(50, 50));
+  const world = new World("Greenfield", [50, 50]);
 
   world.fillTerrain(() => grass);
 
   world.addLocation({
     name: "Martin's Cavern",
-    position: new Vector2(4, 6),
+    position: [4, 6],
     symbol: "X",
-    terrain: new Matrix<Terrain>(new Vector2(40, 30)).fill(() => grass),
+    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
   });
   world.addLocation({
     name: "Ruins of Denerin",
-    position: new Vector2(10, 3),
+    position: [10, 3],
     symbol: "X",
-    terrain: new Matrix<Terrain>(new Vector2(40, 30)).fill(() => grass),
+    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
   });
   world.addLocation({
     name: "Raelan Creek",
-    position: new Vector2(17, 23),
+    position: [17, 23],
     symbol: "X",
-    terrain: new Matrix<Terrain>(new Vector2(40, 30)).fill(() => grass),
+    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
   });
   world.addLocation({
     name: "Really Very Long Namesvilletown",
-    position: new Vector2(14, 18),
+    position: [14, 18],
     symbol: "X",
-    terrain: new Matrix<Terrain>(new Vector2(40, 30)).fill(() => grass),
+    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
   });
 
   return world;
