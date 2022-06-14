@@ -28,7 +28,7 @@ class MainMenuScreen implements Screen {
     this.game = game;
   }
 
-  update = () => {
+  onTick = () => {
     this.game.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
@@ -45,9 +45,7 @@ class MainMenuScreen implements Screen {
           break;
       }
     });
-  };
 
-  render = () => {
     this.game.ui.display.drawText(5, 2, "Adventure!");
 
     this.menu.forEach((item, selected, index) => {
