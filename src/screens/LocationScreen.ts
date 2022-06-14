@@ -21,7 +21,7 @@ class LocationScreen implements Screen {
     this.location = location;
   }
 
-  update = () => {
+  onTick = () => {
     if (this.speed > 0) {
       this.world.clock.sinceLastTick += this.game.state.tick.sinceLast;
       if (this.world.clock.sinceLastTick > (1 / this.speed) * second) {
@@ -61,9 +61,7 @@ class LocationScreen implements Screen {
           break;
       }
     });
-  };
 
-  render = () => {
     this.game.ui.display.drawText(5, 2, this.location.name);
 
     const mapTop = 5;

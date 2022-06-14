@@ -43,7 +43,7 @@ class WorldScreen implements Screen {
     );
   }
 
-  update = () => {
+  onTick = () => {
     this.game.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
@@ -64,9 +64,7 @@ class WorldScreen implements Screen {
           break;
       }
     });
-  };
 
-  render = () => {
     this.game.ui.display.drawText(5, 2, this.world.name);
 
     this.menu.forEach((item, selected, index) => {

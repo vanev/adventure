@@ -18,12 +18,9 @@ class Game {
   start = () => {
     const loop = () => {
       const { tick } = this.state;
-
       tick.update();
 
-      this.screen.update();
-
-      this.screen.render();
+      this.screen.onTick();
 
       // Debug Stuff
       const fps = this.state.tick.fps.toFixed(0);

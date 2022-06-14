@@ -33,7 +33,7 @@ class PauseScreen implements Screen {
     this.previousScreen = previousScreen;
   }
 
-  update = () => {
+  onTick = () => {
     this.game.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
@@ -50,9 +50,7 @@ class PauseScreen implements Screen {
           break;
       }
     });
-  };
 
-  render = () => {
     this.game.ui.display.drawText(5, 2, "Paused...");
 
     this.menu.items.forEach((item, index) => {
