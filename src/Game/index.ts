@@ -24,13 +24,14 @@ class Game {
 
       this.screen.update(this.state);
 
-      this.display.clear();
       this.screen.render(this.display);
 
       // Debug Stuff
       const fps = this.state.tick.fps.toFixed(0);
       const fpsText = `${fps}`;
       this.display.drawText(96, 0, fpsText);
+
+      this.display.render();
 
       keyboard.clear();
 
