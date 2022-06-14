@@ -57,7 +57,7 @@ class LocationScreen implements Screen {
           break;
 
         case "Escape":
-          this.game.handleScreenChange(new PauseScreen(this.game, this));
+          this.game.changeScreen(new PauseScreen(this.game, this));
           break;
       }
     });

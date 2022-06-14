@@ -35,7 +35,7 @@ class Game {
     loop();
   };
 
-  handleScreenChange = (newScreen: Screen) => {
+  changeScreen = (newScreen: Screen) => {
     this.screen = newScreen;
   };
 }

@@ -29,7 +29,7 @@ class WorldScreen implements Screen {
         ([id, location]): Item<WorldScreen> => ({
           label: location.name,
           action: (screen) => {
-            screen.game.handleScreenChange(
+            screen.game.changeScreen(
               new LocationScreen(screen.game, world, id),
             );
           },
@@ -60,7 +60,7 @@ class WorldScreen implements Screen {
           break;
 
         case "Escape":
-          this.game.handleScreenChange(new PauseScreen(this.game, this));
+          this.game.changeScreen(new PauseScreen(this.game, this));
           break;
       }
     });

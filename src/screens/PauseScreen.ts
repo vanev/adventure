@@ -11,7 +11,7 @@ class PauseScreen implements Screen {
     {
       label: "Continue",
       action: (screen) => {
-        screen.game.handleScreenChange(screen.previousScreen);
+        screen.game.changeScreen(screen.previousScreen);
       },
     },
     {
@@ -23,7 +23,7 @@ class PauseScreen implements Screen {
     {
       label: "Quit to Main Menu",
       action: (screen) => {
-        screen.game.handleScreenChange(new MainMenuScreen(screen.game));
+        screen.game.changeScreen(new MainMenuScreen(screen.game));
       },
     },
   ]);
