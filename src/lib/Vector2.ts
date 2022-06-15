@@ -63,4 +63,11 @@ export const allVectors: Record<Direction, Vector2> = {
   ...ordinalVectors,
 };
 
+export const toKey = ([x, y]: Vector2): string => `${x},${y}`;
+
+export const fromKey = (key: string): Vector2 => {
+  const [x, y] = key.split(",");
+  return [parseInt(x, 10), parseInt(y, 10)];
+};
+
 export default Vector2;
