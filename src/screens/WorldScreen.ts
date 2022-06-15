@@ -70,7 +70,7 @@ class WorldScreen implements Screen {
       this.game.ui.display.drawText(5, index + 5, item.label);
 
       if (selected) {
-        this.game.ui.display.draw(3, index + 5, "›", Color.LightWhite);
+        this.game.ui.display.draw(3, index + 5, "X", Color.LightWhite);
       }
     });
 
@@ -91,7 +91,8 @@ class WorldScreen implements Screen {
         location.position[0] + mapRect.origin[0],
         location.position[1] + mapRect.origin[1],
         location.symbol,
-        this.menu.selected === index ? Color.BrightPurple : Color.LightWhite,
+        Color.LightWhite,
+        this.menu.selected === index ? Color.BrightPurple : Color.DarkBlack,
       );
     });
   };

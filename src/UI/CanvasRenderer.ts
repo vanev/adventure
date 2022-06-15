@@ -1,33 +1,40 @@
 import Vector2 from "../lib/Vector2";
+import Tilesheet from "../Tilesheet";
 import RenderPlan from "./RenderPlan";
 
 class CanvasRenderer {
   context: CanvasRenderingContext2D;
-  tileWidth: number;
-  tileHeight: number;
+  tilesheet: Tilesheet;
 
-  constructor(
-    context: CanvasRenderingContext2D,
-    tileWidth: number,
-    tileHeight: number,
-  ) {
+  constructor(context: CanvasRenderingContext2D, tilesheet: Tilesheet) {
     this.context = context;
-    this.tileWidth = tileWidth;
-    this.tileHeight = tileHeight;
+    this.tilesheet = tilesheet;
   }
 
-  draw = ([x, y]: Vector2, { content, foreground, background }: RenderPlan) => {
+  draw = ([x, y]: Vector2, { key, background }: RenderPlan) => {
     this.context.fillStyle = background;
     this.context.fillRect(
-      x * this.tileWidth,
-      y * this.tileHeight,
-      this.tileWidth,
-      this.tileHeight,
+      x * this.tilesheet.tileWidth,
+      y * this.tilesheet.tileHeight,
+      this.tilesheet.tileWidth,
+      this.tilesheet.tileHeight,
     );
 
-    if (content) {
-      this.context.fillStyle = foreground;
-      this.context.fillText(content, x * this.tileWidth, y * this.tileHeight);
+    const source = this.tilesheet.findTile(key);
+    if (source) {
+      const [sourceX, sourceY] = source;
+
+      this.context.drawImage(
+        this.tilesheet.image,
+        sourceX,
+        sourceY,
+        this.tilesheet.tileWidth,
+        this.tilesheet.tileHeight,
+        x * this.tilesheet.tileWidth,
+        y * this.tilesheet.tileHeight,
+        this.tilesheet.tileWidth,
+        this.tilesheet.tileHeight,
+      );
     }
   };
 }

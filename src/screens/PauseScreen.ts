@@ -57,7 +57,7 @@ class PauseScreen implements Screen {
       this.game.ui.display.drawText(5, index + 5, item.label);
 
       if (this.menu.selected === index) {
-        this.game.ui.display.draw(3, index + 5, "›", Color.LightWhite);
+        this.game.ui.display.draw(3, index + 5, "X", Color.LightWhite);
       }
     });
   };
