@@ -2,7 +2,6 @@ import { pipe } from "fp-ts/lib/function";
 import { isNonEmpty, map } from "fp-ts/lib/Array";
 import { toArray } from "fp-ts/lib/Map";
 import Rectangle from "../lib/Rectangle";
-import Vector2 from "../lib/Vector2";
 import { Id, Ord as idOrd } from "../lib/Id";
 import Color from "../Color";
 import Game from "../Game";
@@ -71,7 +70,7 @@ class WorldScreen implements Screen {
       this.game.ui.display.drawText(5, index + 5, item.label);
 
       if (selected) {
-        this.game.ui.display.drawOver(3, index + 5, "›", Color.LightWhite);
+        this.game.ui.display.draw(3, index + 5, "›", Color.LightWhite);
       }
     });
 
@@ -88,7 +87,7 @@ class WorldScreen implements Screen {
     });
 
     this.locations.forEach(([id, location], index) => {
-      this.game.ui.display.drawOver(
+      this.game.ui.display.draw(
         location.position[0] + mapRect.origin[0],
         location.position[1] + mapRect.origin[1],
         location.symbol,

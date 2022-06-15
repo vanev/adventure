@@ -82,7 +82,7 @@ class LocationScreen implements Screen {
       );
     });
 
-    this.game.ui.display.drawOver(
+    this.game.ui.display.draw(
       this.world.hero.position[0] + mapLeft,
       this.world.hero.position[1] + mapTop,
       this.world.hero.symbol,
