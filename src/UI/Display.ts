@@ -105,16 +105,6 @@ class Display {
     }
   };
 
-  drawOver = (
-    x: number,
-    y: number,
-    content: string,
-    foreground: Color = this.foreground,
-    background: Color = this.background,
-  ) => {
-    this.draw(x, y, content, foreground, background);
-  };
-
   render = () => {
     for (const key of this.removals) {
       const [x, y] = fromKey(key);
