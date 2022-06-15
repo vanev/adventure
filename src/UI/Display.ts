@@ -6,6 +6,8 @@ import VirtualRenderer from "./VirtualRenderer";
 export type Config = {
   width: number;
   height: number;
+  tileWidth: number;
+  tileHeight: number;
   background: Color;
   foreground: Color;
   tilesheet: Tilesheet;
@@ -18,15 +20,20 @@ class Display {
   background: Color;
   foreground: Color;
 
-  constructor({ width, height, background, foreground, tilesheet }: Config) {
+  constructor({
+    width,
+    height,
+    tileWidth,
+    tileHeight,
+    background,
+    foreground,
+    tilesheet,
+  }: Config) {
     this.canvas = document.createElement("canvas");
 
     const context = this.canvas.getContext("2d", { alpha: false });
     if (!context) throw new Error("Cannot get canvas context.");
     context.globalCompositeOperation = "destination-over";
-
-    const tileHeight = tilesheet.tileHeight;
-    const tileWidth = tilesheet.tileWidth;
 
     this.canvas.width = tileWidth * width;
     this.canvas.height = tileHeight * height;
@@ -37,7 +44,12 @@ class Display {
     context.fillStyle = this.background;
     context.fillRect(0, 0, width * tileWidth, height * tileHeight);
 
-    this.actualRenderer = new CanvasRenderer(context, tilesheet);
+    this.actualRenderer = new CanvasRenderer(
+      context,
+      tilesheet,
+      tileWidth,
+      tileHeight,
+    );
   }
 
   draw = (

@@ -19,6 +19,8 @@ image.onload = () => {
   const displayConfig = {
     width: 100,
     height: 40,
+    tileWidth: 9,
+    tileHeight: 16,
     background: Color.DarkBlack,
     foreground: Color.LightWhite,
     tilesheet,
