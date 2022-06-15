@@ -1,14 +1,14 @@
 import Color from "../Color";
+import Tilesheet from "../Tilesheet";
 import CanvasRenderer from "./CanvasRenderer";
 import VirtualRenderer from "./VirtualRenderer";
 
 export type Config = {
   width: number;
   height: number;
-  fontSize: number;
-  fontFamily: string;
   background: Color;
   foreground: Color;
+  tilesheet: Tilesheet;
 };
 
 class Display {
@@ -18,27 +18,15 @@ class Display {
   background: Color;
   foreground: Color;
 
-  constructor({
-    fontSize,
-    fontFamily,
-    width,
-    height,
-    background,
-    foreground,
-  }: Config) {
+  constructor({ width, height, background, foreground, tilesheet }: Config) {
     this.canvas = document.createElement("canvas");
 
     const context = this.canvas.getContext("2d", { alpha: false });
     if (!context) throw new Error("Cannot get canvas context.");
     context.globalCompositeOperation = "destination-over";
 
-    const tileHeight = fontSize;
-
-    // Measure the Typeface
-    const testHeight = 100;
-    context.font = `${testHeight}px ${fontFamily}`;
-    const testWidth = Math.ceil(context.measureText("W").width);
-    const tileWidth = Math.ceil((fontSize * testWidth) / testHeight);
+    const tileHeight = tilesheet.tileHeight;
+    const tileWidth = tilesheet.tileWidth;
 
     this.canvas.width = tileWidth * width;
     this.canvas.height = tileHeight * height;
@@ -46,29 +34,26 @@ class Display {
     this.background = background;
     this.foreground = foreground;
 
-    context.font = `${tileHeight}px ${fontFamily}`;
-    context.textBaseline = "top";
-
     context.fillStyle = this.background;
     context.fillRect(0, 0, width * tileWidth, height * tileHeight);
 
-    this.actualRenderer = new CanvasRenderer(context, tileWidth, tileHeight);
+    this.actualRenderer = new CanvasRenderer(context, tilesheet);
   }
 
   draw = (
     x: number,
     y: number,
-    content: string,
+    key: string,
     foreground: Color = this.foreground,
     background: Color = this.background,
   ) => {
-    this.virtualRenderer.draw([x, y], { content, foreground, background });
+    this.virtualRenderer.draw([x, y], { key, background });
   };
 
   drawText = (x: number, y: number, content: string) => {
     const characters = content.split("");
     for (let i = 0; i < characters.length; i++) {
-      this.draw(x + i, y, characters[i], this.foreground, this.background);
+      this.draw(x + i, y, characters[i].toUpperCase(), this.background);
     }
   };
 
