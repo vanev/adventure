@@ -1,21 +1,6 @@
 import Color from "../Color";
-
-type Plan = {
-  content: string;
-  background: Color;
-  foreground: Color;
-};
-
-const equals = (a: Plan, b: Plan): boolean =>
-  a.content === b.content &&
-  a.background === b.background &&
-  a.foreground === b.foreground;
-
-const toKey = (x: number, y: number): string => `${x},${y}`;
-const fromKey = (key: string): [number, number] => {
-  const [x, y] = key.split(",");
-  return [parseInt(x, 10), parseInt(y, 10)];
-};
+import CanvasRenderer from "./CanvasRenderer";
+import VirtualRenderer from "./VirtualRenderer";
 
 export type Config = {
   width: number;
@@ -27,58 +12,48 @@ export type Config = {
 };
 
 class Display {
-  width: number;
-  height: number;
-  tileWidth: number;
-  tileHeight: number;
+  actualRenderer: CanvasRenderer;
+  virtualRenderer: VirtualRenderer = new VirtualRenderer();
   canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
   background: Color;
   foreground: Color;
-  changes: Record<string, Plan> = {};
-  current: Record<string, Plan> = {};
-  removals: Set<string> = new Set();
 
-  constructor(config: Config) {
+  constructor({
+    fontSize,
+    fontFamily,
+    width,
+    height,
+    background,
+    foreground,
+  }: Config) {
     this.canvas = document.createElement("canvas");
 
     const context = this.canvas.getContext("2d", { alpha: false });
     if (!context) throw new Error("Cannot get canvas context.");
-    this.context = context;
-    this.context.globalCompositeOperation = "destination-over";
+    context.globalCompositeOperation = "destination-over";
 
-    this.tileHeight = config.fontSize;
+    const tileHeight = fontSize;
 
     // Measure the Typeface
     const testHeight = 100;
-    this.context.font = `${testHeight}px ${config.fontFamily}`;
-    const testWidth = Math.ceil(this.context.measureText("W").width);
-    this.tileWidth = Math.ceil((config.fontSize * testWidth) / testHeight);
+    context.font = `${testHeight}px ${fontFamily}`;
+    const testWidth = Math.ceil(context.measureText("W").width);
+    const tileWidth = Math.ceil((fontSize * testWidth) / testHeight);
 
-    this.width = config.width;
-    this.height = config.height;
+    this.canvas.width = tileWidth * width;
+    this.canvas.height = tileHeight * height;
 
-    this.canvas.width = this.tileWidth * this.width;
-    this.canvas.height = this.tileHeight * this.height;
+    this.background = background;
+    this.foreground = foreground;
 
-    this.background = config.background;
-    this.foreground = config.foreground;
+    context.font = `${tileHeight}px ${fontFamily}`;
+    context.textBaseline = "top";
 
-    this.context.font = `${this.tileHeight}px ${config.fontFamily}`;
-    this.context.textBaseline = "top";
+    context.fillStyle = this.background;
+    context.fillRect(0, 0, width * tileWidth, height * tileHeight);
 
-    this.context.fillStyle = this.background;
-    this.context.fillRect(
-      0,
-      0,
-      this.width * this.tileWidth,
-      this.height * this.tileHeight,
-    );
+    this.actualRenderer = new CanvasRenderer(context, tileWidth, tileHeight);
   }
-
-  getContainer = (): HTMLElement => {
-    return this.canvas;
-  };
 
   draw = (
     x: number,
@@ -87,15 +62,7 @@ class Display {
     foreground: Color = this.foreground,
     background: Color = this.background,
   ) => {
-    const key = toKey(x, y);
-    this.removals.delete(key);
-    const plan = { content, foreground, background };
-    const currentPlan = this.current[key];
-    if (currentPlan && equals(plan, currentPlan)) {
-      delete this.changes[key];
-    } else {
-      this.changes[key] = plan;
-    }
+    this.virtualRenderer.draw([x, y], { content, foreground, background });
   };
 
   drawText = (x: number, y: number, content: string) => {
@@ -106,52 +73,7 @@ class Display {
   };
 
   render = () => {
-    for (const key of this.removals) {
-      const [x, y] = fromKey(key);
-
-      const current = this.current[key];
-
-      let length = current ? current.content.length : 1;
-      length = length > 1 ? length + 1 : length;
-
-      this.context.fillStyle = this.background;
-      this.context.fillRect(
-        x * this.tileWidth,
-        y * this.tileHeight,
-        this.tileWidth * length,
-        this.tileHeight,
-      );
-
-      delete this.current[key];
-    }
-
-    for (const [key, instruction] of Object.entries(this.changes)) {
-      const [x, y] = fromKey(key);
-
-      const current = this.current[key];
-
-      let length = current ? current.content.length : 1;
-      length = length > 1 ? length + 1 : length;
-
-      this.context.fillStyle = instruction.background;
-      this.context.fillRect(
-        x * this.tileWidth,
-        y * this.tileHeight,
-        this.tileWidth * length,
-        this.tileHeight,
-      );
-      this.context.fillStyle = instruction.foreground;
-      this.context.fillText(
-        instruction.content,
-        x * this.tileWidth,
-        y * this.tileHeight,
-      );
-
-      this.current[key] = instruction;
-      delete this.changes[key];
-    }
-
-    this.removals = new Set(Object.keys(this.current));
+    this.virtualRenderer.commitTo(this.actualRenderer);
   };
 }
 
