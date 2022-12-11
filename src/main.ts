@@ -17,9 +17,9 @@ image.onload = () => {
   const tilesheet = new Tilesheet(image, tilemapData as unknown as Config);
 
   const displayConfig = {
-    width: 100,
+    width: 60,
     height: 40,
-    tileWidth: 9,
+    tileWidth: 16,
     tileHeight: 16,
     background: Color.DarkBlack,
     foreground: Color.LightWhite,
