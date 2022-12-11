@@ -8,8 +8,8 @@ import Vector2, {
 import { Cardinal, Ordinal, Direction } from "./Direction";
 
 class Matrix<T> {
-  private width: number;
-  private height: number;
+  width: number;
+  height: number;
   private _cells: Array<T> = [];
 
   constructor([x, y]: Vector2) {
