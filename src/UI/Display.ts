@@ -1,6 +1,10 @@
 import Color from "../Color";
+import Vector2 from "../lib/Vector2";
 import Tilesheet from "../Tilesheet";
 import CanvasRenderer from "./CanvasRenderer";
+import Renderer from "./Renderer";
+import RenderPlan from "./RenderPlan";
+import TextRenderer from "./TextRenderer";
 import VirtualRenderer from "./VirtualRenderer";
 
 export type Config = {
@@ -13,8 +17,8 @@ export type Config = {
   tilesheet: Tilesheet;
 };
 
-class Display {
-  actualRenderer: CanvasRenderer;
+class Display implements Renderer, TextRenderer {
+  actualRenderer: Renderer;
   virtualRenderer: VirtualRenderer = new VirtualRenderer();
   canvas: HTMLCanvasElement;
   background: Color;
@@ -49,23 +53,21 @@ class Display {
       tilesheet,
       tileWidth,
       tileHeight,
+      this.background,
     );
   }
 
-  draw = (
-    x: number,
-    y: number,
-    key: string,
-    foreground: Color = this.foreground,
-    background: Color = this.background,
-  ) => {
-    this.virtualRenderer.draw([x, y], { key, background });
+  draw = (point: Vector2, plan: RenderPlan) => {
+    this.virtualRenderer.draw(point, plan);
   };
 
-  drawText = (x: number, y: number, content: string) => {
+  drawText = ([x, y]: Vector2, content: string) => {
     const characters = content.split("");
     for (let i = 0; i < characters.length; i++) {
-      this.draw(x + i, y, characters[i].toUpperCase(), this.background);
+      this.draw([x + i, y], {
+        key: characters[i].toUpperCase(),
+        background: this.background,
+      });
     }
   };
 

@@ -1,8 +1,8 @@
 import Vector2, { fromKey, toKey } from "../lib/Vector2";
-import CanvasRenderer from "./CanvasRenderer";
+import Renderer from "./Renderer";
 import RenderPlan, { equals, removePlan } from "./RenderPlan";
 
-class VirtualDisplay {
+class VirtualRenderer implements Renderer {
   current: Record<string, RenderPlan> = {};
   changes: Record<string, RenderPlan> = {};
   removals: Set<string> = new Set();
@@ -20,7 +20,7 @@ class VirtualDisplay {
     }
   };
 
-  commitTo = (actual: CanvasRenderer) => {
+  commitTo = (actual: Renderer) => {
     for (const key of this.removals) {
       const point = fromKey(key);
 
@@ -42,4 +42,4 @@ class VirtualDisplay {
   };
 }
 
-export default VirtualDisplay;
+export default VirtualRenderer;

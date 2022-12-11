@@ -3,9 +3,10 @@ import { Id } from "../lib/Id";
 import { cardinalNeighbors } from "../lib/Vector2";
 import Game from "../Game";
 import World, { Location } from "../World";
+import MapCameraContainer from "../UI/MapCameraContainer";
 import Screen from "./Screen";
 import PauseScreen from "./PauseScreen";
-import Color from "../Color";
+import BasicContainer from "../UI/BasicContainer";
 
 class LocationScreen implements Screen {
   game: Game;
@@ -67,31 +68,30 @@ class LocationScreen implements Screen {
       }
     });
 
-    this.game.ui.display.drawText(5, 2, this.location.name);
+    this.game.ui.display.drawText([5, 2], this.location.name);
 
-    const mapTop = 5;
-    const mapLeft = 0;
-
-    this.location.terrain.forEach((terrain, [x, y]) => {
-      this.game.ui.display.draw(
-        x + mapLeft,
-        y + mapTop,
-        terrain.symbol,
-        terrain.foregroundColor,
-        terrain.backgroundColor,
-      );
+    const mapCameraContainer = new MapCameraContainer({
+      position: [0, 5],
+      size: [60, 34],
+      parent: this.game.ui.display,
+      map: this.world.terrain,
+      focus: this.world.hero.position,
     });
 
-    this.game.ui.display.draw(
-      this.world.hero.position[0] + mapLeft,
-      this.world.hero.position[1] + mapTop,
-      this.world.hero.symbol,
-      Color.LightWhite,
-    );
+    mapCameraContainer.drawMap();
 
-    this.game.ui.display.drawText(0, 39, `Speed: ${this.speed}`);
+    mapCameraContainer.drawOnMap(this.world.hero.position, {
+      key: this.world.hero.symbol,
+    });
 
-    this.game.ui.display.drawText(10, 39, `Clock: ${this.world.clock.current}`);
+    const infoContainer = new BasicContainer({
+      position: [0, 39],
+      size: [60, 1],
+      parent: this.game.ui.display,
+    });
+
+    infoContainer.drawText([0, 0], `Speed: ${this.speed}`);
+    infoContainer.drawText([10, 0], `Clock: ${this.world.clock.current}`);
   };
 }
 

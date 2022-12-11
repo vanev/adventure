@@ -1,13 +1,13 @@
 import Color from "../Color";
 
 export type Terrain = {
-  symbol: string;
-  foregroundColor: Color;
-  backgroundColor: Color;
+  key: string;
+  foreground: Color;
+  background: Color;
 };
 
 export const grass: Terrain = {
-  symbol: ".",
-  foregroundColor: Color.MidGreen,
-  backgroundColor: Color.DarkGreen,
+  key: ".",
+  foreground: Color.MidGreen,
+  background: Color.DarkGreen,
 };

@@ -25,7 +25,7 @@ class Game {
       // Debug Stuff
       const fps = this.state.tick.fps.toFixed(0);
       const fpsText = `${fps}`;
-      this.ui.display.drawText(96, 0, fpsText);
+      this.ui.display.drawText([96, 0], fpsText);
 
       this.ui.onTick();
 

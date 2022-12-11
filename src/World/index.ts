@@ -36,13 +36,13 @@ class World {
 }
 
 export const generate = (): World => {
-  const world = new World("Greenfield", [50, 50]);
+  const world = new World("Greenfield", [200, 200]);
 
   world.fillTerrain(() => grass);
 
   world.addLocation({
     name: "Martin's Cavern",
-    position: [4, 6],
+    position: [1, 1],
     symbol: "X",
     terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
   });
@@ -60,7 +60,7 @@ export const generate = (): World => {
   });
   world.addLocation({
     name: "Really Very Long Namesvilletown",
-    position: [14, 18],
+    position: [45, 45],
     symbol: "X",
     terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
   });

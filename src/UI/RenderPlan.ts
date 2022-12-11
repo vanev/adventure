@@ -3,7 +3,7 @@ import Color from "../Color";
 type RenderPlan = {
   key: string;
   // foreground: Color;
-  background: Color;
+  background?: Color;
 };
 
 export const removePlan: RenderPlan = {

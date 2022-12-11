@@ -1,6 +1,6 @@
-import Color from "../Color";
 import Game from "../Game";
 import Menu from "../Menu";
+import MenuContainer from "../UI/MenuContainer";
 import MainMenuScreen from "./MainMenuScreen";
 import Screen from "./Screen";
 
@@ -51,15 +51,16 @@ class PauseScreen implements Screen {
       }
     });
 
-    this.game.ui.display.drawText(5, 2, "Paused...");
+    this.game.ui.display.drawText([5, 2], "Paused...");
 
-    this.menu.items.forEach((item, index) => {
-      this.game.ui.display.drawText(5, index + 5, item.label);
-
-      if (this.menu.selected === index) {
-        this.game.ui.display.draw(3, index + 5, "X", Color.LightWhite);
-      }
+    const menuContainer = new MenuContainer({
+      position: [3, 5],
+      size: [30, 30],
+      parent: this.game.ui.display,
+      menu: this.menu,
     });
+
+    menuContainer.drawMenu();
   };
 }
 

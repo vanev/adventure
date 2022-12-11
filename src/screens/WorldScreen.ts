@@ -1,12 +1,13 @@
 import { pipe } from "fp-ts/lib/function";
 import { isNonEmpty, map } from "fp-ts/lib/Array";
 import { toArray } from "fp-ts/lib/Map";
-import Rectangle from "../lib/Rectangle";
 import { Id, Ord as idOrd } from "../lib/Id";
 import Color from "../Color";
 import Game from "../Game";
 import Menu, { Item } from "../Menu";
 import World, { Location } from "../World";
+import MapCameraContainer from "../UI/MapCameraContainer";
+import MenuContainer from "../UI/MenuContainer";
 import Screen from "./Screen";
 import LocationScreen from "./LocationScreen";
 import PauseScreen from "./PauseScreen";
@@ -64,36 +65,35 @@ class WorldScreen implements Screen {
       }
     });
 
-    this.game.ui.display.drawText(5, 2, this.world.name);
+    this.game.ui.display.drawText([5, 2], this.world.name);
 
-    this.menu.forEach((item, selected, index) => {
-      this.game.ui.display.drawText(5, index + 5, item.label);
-
-      if (selected) {
-        this.game.ui.display.draw(3, index + 5, "X", Color.LightWhite);
-      }
+    const menuContainer = new MenuContainer({
+      position: [3, 5],
+      size: [30, 30],
+      parent: this.game.ui.display,
+      menu: this.menu,
     });
 
-    const mapRect = new Rectangle([30, 2], [30, 30]);
+    menuContainer.drawMenu();
 
-    this.world.terrain.forEach((terrain, point) => {
-      this.game.ui.display.draw(
-        point[0] + mapRect.origin[0],
-        point[1] + mapRect.origin[1],
-        terrain.symbol,
-        terrain.foregroundColor,
-        terrain.backgroundColor,
-      );
+    const [_, selectedLocation] = this.locations[this.menu.selected];
+
+    const mapCameraContainer = new MapCameraContainer({
+      position: [30, 2],
+      size: [30, 30],
+      parent: this.game.ui.display,
+      map: this.world.terrain,
+      focus: selectedLocation.position,
     });
 
-    this.locations.forEach(([id, location], index) => {
-      this.game.ui.display.draw(
-        location.position[0] + mapRect.origin[0],
-        location.position[1] + mapRect.origin[1],
-        location.symbol,
-        Color.LightWhite,
-        this.menu.selected === index ? Color.BrightPurple : Color.DarkBlack,
-      );
+    mapCameraContainer.drawMap();
+
+    this.locations.forEach(([_, location], index) => {
+      mapCameraContainer.drawOnMap(location.position, {
+        key: location.symbol,
+        background:
+          this.menu.selected === index ? Color.BrightPurple : Color.DarkBlack,
+      });
     });
   };
 }
