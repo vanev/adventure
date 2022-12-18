@@ -4,16 +4,16 @@ import Vector2 from "../lib/Vector2";
 import { Location } from "./Location";
 import { Terrain, grass } from "./Terrain";
 import Hero from "./Hero";
-import Clock from "./Clock";
+import * as Clock from "./Clock";
 
-export type { Terrain, Location, Hero, Clock };
+export type { Terrain, Location, Hero };
 
 class World {
   name: string;
   terrain: Matrix.Matrix<Terrain>;
   locations: Map<Id, Location> = new Map();
   hero: Hero = new Hero();
-  clock: Clock = new Clock();
+  clock: Clock.Clock = Clock.zero;
 
   constructor(name: string, size: Vector2) {
     this.name = name;

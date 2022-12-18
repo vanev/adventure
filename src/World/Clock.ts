@@ -1,6 +1,9 @@
-class Clock {
-  current: number = 0;
-  sinceLastTick: number = 0;
-}
+export type Clock = {
+  current: number;
+  sinceLastTick: number;
+};
 
-export default Clock;
+export const zero: Clock = {
+  current: 0,
+  sinceLastTick: 0,
+};
