@@ -1,5 +1,5 @@
 import { Id, generateUnique } from "../lib/Id";
-import Matrix from "../lib/Matrix";
+import * as Matrix from "../lib/Matrix";
 import Vector2 from "../lib/Vector2";
 import { Location } from "./Location";
 import { Terrain, grass } from "./Terrain";
@@ -10,18 +10,18 @@ export type { Terrain, Location, Hero, Clock };
 
 class World {
   name: string;
-  terrain: Matrix<Terrain>;
+  terrain: Matrix.Matrix<Terrain>;
   locations: Map<Id, Location> = new Map();
   hero: Hero = new Hero();
   clock: Clock = new Clock();
 
   constructor(name: string, size: Vector2) {
     this.name = name;
-    this.terrain = new Matrix(size);
+    this.terrain = Matrix.fromSize(size);
   }
 
   fillTerrain = (iterator: (point: Vector2) => Terrain) => {
-    this.terrain.fill(iterator);
+    this.terrain = Matrix.fill(iterator)(this.terrain);
   };
 
   addLocation = (location: Location): Id => {
@@ -44,25 +44,25 @@ export const generate = (): World => {
     name: "Martin's Cavern",
     position: [1, 1],
     symbol: "X",
-    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
+    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
   });
   world.addLocation({
     name: "Ruins of Denerin",
     position: [10, 3],
     symbol: "X",
-    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
+    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
   });
   world.addLocation({
     name: "Raelan Creek",
     position: [17, 23],
     symbol: "X",
-    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
+    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
   });
   world.addLocation({
     name: "Really Very Long Namesvilletown",
     position: [45, 45],
     symbol: "X",
-    terrain: new Matrix<Terrain>([40, 30]).fill(() => grass),
+    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
   });
 
   return world;

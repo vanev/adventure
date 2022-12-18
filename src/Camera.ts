@@ -1,10 +1,10 @@
-import Matrix from "./lib/Matrix";
+import * as Matrix from "./lib/Matrix";
 import { NumberRange } from "./lib/Range";
 import Rectangle from "./lib/Rectangle";
 import Vector2, { add, subtract } from "./lib/Vector2";
 
 export type Config<T> = {
-  subject: Matrix<T>;
+  subject: Matrix.Matrix<T>;
   size: Vector2;
   focus: Vector2;
 };
@@ -13,7 +13,7 @@ export type Config<T> = {
  * An Camera provides a view into a subject matrix around a focal point (focus).
  */
 export default class Camera<T> {
-  private subject: Matrix<T>;
+  private subject: Matrix.Matrix<T>;
   private frame: Rectangle;
 
   constructor({ subject, size, focus }: Config<T>) {
@@ -65,7 +65,7 @@ export default class Camera<T> {
 
   *values(): Generator<T | undefined> {
     for (let point of this.points()) {
-      const value = this.subject.get(this.toSubjectPoint(point));
+      const value = Matrix.get<T>(this.toSubjectPoint(point))(this.subject);
 
       yield value;
     }
@@ -76,7 +76,7 @@ export default class Camera<T> {
    */
   *cells(): Generator<[Vector2, T | undefined]> {
     for (let point of this.points()) {
-      const value = this.subject.get(this.toSubjectPoint(point));
+      const value = Matrix.get<T>(this.toSubjectPoint(point))(this.subject);
 
       yield [point, value];
     }

@@ -1,4 +1,4 @@
-import Matrix from "../lib/Matrix";
+import * as Matrix from "../lib/Matrix";
 import Vector2 from "../lib/Vector2";
 import RenderPlan from "../UI/RenderPlan";
 import Camera from "../Camera";
@@ -10,7 +10,7 @@ export type Config = {
   position: Vector2;
   size: Vector2;
   parent: Container;
-  map: Matrix<Terrain>;
+  map: Matrix.Matrix<Terrain>;
   focus: Vector2;
 };
 

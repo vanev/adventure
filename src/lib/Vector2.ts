@@ -1,7 +1,7 @@
 import { flow } from "fp-ts/lib/function";
 import { Cardinal, Ordinal, Direction } from "./Direction";
 
-type Vector2 = [number, number];
+export type Vector2 = [number, number];
 
 export const add = ([ax, ay]: Vector2, [bx, by]: Vector2): Vector2 => [
   ax + bx,

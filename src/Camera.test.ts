@@ -1,9 +1,11 @@
-import Matrix from "./lib/Matrix";
+import * as Matrix from "./lib/Matrix";
 import Camera from "./Camera";
 
 describe("Camera", () => {
   it("works in the middle", () => {
-    const subject = new Matrix([10, 5]).fill(([x, y]) => `${x}${y}`);
+    const subject = Matrix.fill(([x, y]) => `${x}${y}`)(
+      Matrix.fromSize([10, 5]),
+    );
 
     const camera = new Camera({
       subject,
@@ -18,7 +20,9 @@ describe("Camera", () => {
   });
 
   it("works in the top left corner", () => {
-    const subject = new Matrix([10, 5]).fill(([x, y]) => `${x}${y}`);
+    const subject = Matrix.fill(([x, y]) => `${x}${y}`)(
+      Matrix.fromSize([10, 5]),
+    );
 
     const camera = new Camera({
       subject,
@@ -33,7 +37,9 @@ describe("Camera", () => {
   });
 
   it("works in the bottom right corner", () => {
-    const subject = new Matrix([10, 5]).fill(([x, y]) => `${x}${y}`);
+    const subject = Matrix.fill(([x, y]) => `${x}${y}`)(
+      Matrix.fromSize([10, 5]),
+    );
 
     const camera = new Camera({
       subject,
