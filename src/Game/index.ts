@@ -1,12 +1,11 @@
 import UI from "../UI";
 import Screen from "../screens/Screen";
 import MainMenuScreen from "../screens/MainMenuScreen";
-import { State, initial as initialState } from "./State";
-
-export type { State };
+import * as State from "./State";
+import * as Tick from "./Tick";
 
 class Game {
-  state: State = initialState;
+  state: State.State = State.initial();
   ui: UI;
   screen: Screen;
 
@@ -17,8 +16,7 @@ class Game {
 
   start = () => {
     const loop = () => {
-      const { tick } = this.state;
-      tick.update();
+      this.state.tick = Tick.update(this.state.tick);
 
       this.screen.onTick();
 

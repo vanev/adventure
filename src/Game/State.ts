@@ -1,9 +1,9 @@
-import Tick from "./Tick";
+import * as Tick from "./Tick";
 
 export type State = {
-  tick: Tick;
+  tick: Tick.Tick;
 };
 
-export const initial: State = {
-  tick: new Tick(),
-};
+export const initial = (): State => ({
+  tick: Tick.initial(),
+});
