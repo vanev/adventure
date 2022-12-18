@@ -5,18 +5,18 @@ import { Id, Ord as idOrd } from "../lib/Id";
 import Color from "../Color";
 import Game from "../Game";
 import Menu, { Item } from "../Menu";
-import { World, Location } from "../World";
+import { World, Place } from "../World";
 import MapCameraContainer from "../UI/MapCameraContainer";
 import MenuContainer from "../UI/MenuContainer";
 import Screen from "./Screen";
-import LocationScreen from "./LocationScreen";
+import PlaceScreen from "./PlaceScreen";
 import PauseScreen from "./PauseScreen";
 
 class WorldScreen implements Screen {
   game: Game;
   world: World;
   menu: Menu<WorldScreen>;
-  locations: Array<[Id, Location]>;
+  locations: Array<[Id, Place]>;
 
   constructor(game: Game, world: World) {
     this.game = game;
@@ -29,9 +29,7 @@ class WorldScreen implements Screen {
         ([id, location]): Item<WorldScreen> => ({
           label: location.name,
           action: (screen) => {
-            screen.game.changeScreen(
-              new LocationScreen(screen.game, world, id),
-            );
+            screen.game.changeScreen(new PlaceScreen(screen.game, world, id));
           },
         }),
       ),
@@ -39,7 +37,7 @@ class WorldScreen implements Screen {
     this.menu = new Menu(
       isNonEmpty(menuItems)
         ? menuItems
-        : [{ label: "No Locations", action: () => {} }],
+        : [{ label: "No Places", action: () => {} }],
     );
   }
 
@@ -76,14 +74,14 @@ class WorldScreen implements Screen {
 
     menuContainer.drawMenu();
 
-    const [_, selectedLocation] = this.locations[this.menu.selected];
+    const [_, selectedPlace] = this.locations[this.menu.selected];
 
     const mapCameraContainer = new MapCameraContainer({
       position: [30, 2],
       size: [30, 30],
       parent: this.game.ui.display,
       map: this.world.terrain,
-      focus: selectedLocation.position,
+      focus: selectedPlace.position,
     });
 
     mapCameraContainer.drawMap();
