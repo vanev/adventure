@@ -1,26 +1,34 @@
-import Vector2, { add } from "./Vector2";
+import * as Vector2 from "./Vector2";
 
-class Rectangle {
-  origin: Vector2;
-  size: Vector2;
+export type Rectangle = {
+  origin: Vector2.Vector2;
+  size: Vector2.Vector2;
+};
 
-  constructor(origin: Vector2, size: Vector2) {
-    this.origin = origin;
-    this.size = size;
-  }
+export const rectangle = (
+  origin: Vector2.Vector2,
+  size: Vector2.Vector2,
+): Rectangle => ({ origin, size });
 
-  corners = (): [Vector2, Vector2, Vector2, Vector2] => [
-    this.origin,
-    [this.origin[0] + this.size[0] - 1, this.origin[1]],
-    [this.origin[0], this.origin[1] + this.size[1] - 1],
-    add(this.origin, this.size),
-  ];
+export const corners = ({
+  origin,
+  size,
+}: Rectangle): [
+  Vector2.Vector2,
+  Vector2.Vector2,
+  Vector2.Vector2,
+  Vector2.Vector2,
+] => [
+  origin,
+  [origin[0] + size[0] - 1, origin[1]],
+  [origin[0], origin[1] + size[1] - 1],
+  Vector2.add(origin, size),
+];
 
-  contains = ([x, y]: Vector2): boolean =>
-    x >= this.origin[0] &&
-    x <= this.origin[0] + this.size[0] - 1 &&
-    y >= this.origin[1] &&
-    y <= this.origin[1] + this.size[1] - 1;
-}
-
-export default Rectangle;
+export const contains =
+  ([x, y]: Vector2.Vector2) =>
+  ({ origin, size }: Rectangle): boolean =>
+    x >= origin[0] &&
+    x <= origin[0] + size[0] - 1 &&
+    y >= origin[1] &&
+    y <= origin[1] + size[1] - 1;

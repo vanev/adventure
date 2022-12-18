@@ -1,7 +1,7 @@
 import * as Matrix from "./lib/Matrix";
 import { range } from "./lib/Number";
 import { clamp } from "./lib/Range";
-import Rectangle from "./lib/Rectangle";
+import * as Rectangle from "./lib/Rectangle";
 import Vector2, { add, subtract } from "./lib/Vector2";
 
 export type Config<T> = {
@@ -15,7 +15,7 @@ export type Config<T> = {
  */
 export default class Camera<T> {
   private subject: Matrix.Matrix<T>;
-  private frame: Rectangle;
+  private frame: Rectangle.Rectangle;
 
   constructor({ subject, size, focus }: Config<T>) {
     this.subject = subject;
@@ -31,14 +31,14 @@ export default class Camera<T> {
 
     const origin: Vector2 = [clamp(originX)(rangeX), clamp(originY)(rangeY)];
 
-    this.frame = new Rectangle(origin, size);
+    this.frame = Rectangle.rectangle(origin, size);
   }
 
   /**
    * Returns whether a given point in the subject is in the camera's view.
    */
   isInView = (subjectPoint: Vector2): boolean =>
-    this.frame.contains(subjectPoint);
+    Rectangle.contains(subjectPoint)(this.frame);
 
   /**
    * Converts a point in the subject to it's corresponding point in the camera.
