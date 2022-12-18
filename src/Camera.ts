@@ -1,5 +1,6 @@
 import * as Matrix from "./lib/Matrix";
-import { NumberRange } from "./lib/Range";
+import { range } from "./lib/Number";
+import { clamp } from "./lib/Range";
 import Rectangle from "./lib/Rectangle";
 import Vector2, { add, subtract } from "./lib/Vector2";
 
@@ -25,10 +26,10 @@ export default class Camera<T> {
     const originX = Math.ceil(focusX - (width - 1) / 2);
     const originY = Math.ceil(focusY - (height - 1) / 2);
 
-    const rangeX = new NumberRange(0, this.subject.width - width);
-    const rangeY = new NumberRange(0, this.subject.height - height);
+    const rangeX = range(0, this.subject.width - width);
+    const rangeY = range(0, this.subject.height - height);
 
-    const origin: Vector2 = [rangeX.clamp(originX), rangeY.clamp(originY)];
+    const origin: Vector2 = [clamp(originX)(rangeX), clamp(originY)(rangeY)];
 
     this.frame = new Rectangle(origin, size);
   }
