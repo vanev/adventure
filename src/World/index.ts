@@ -1,3 +1,5 @@
+import { pipe } from "fp-ts/lib/function";
+import { fst } from "fp-ts/lib/Tuple";
 import { Id, generateUnique } from "../lib/Id";
 import * as Matrix from "../lib/Matrix";
 import Vector2 from "../lib/Vector2";
@@ -8,64 +10,73 @@ import * as Clock from "./Clock";
 
 export type { Terrain, Location };
 
-class World {
+export type World = {
   name: string;
   terrain: Matrix.Matrix<Terrain>;
-  locations: Map<Id, Location> = new Map();
-  hero: Hero.Hero = Hero.initial();
-  clock: Clock.Clock = Clock.zero;
-
-  constructor(name: string, size: Vector2) {
-    this.name = name;
-    this.terrain = Matrix.fromSize(size);
-  }
-
-  fillTerrain = (iterator: (point: Vector2) => Terrain) => {
-    this.terrain = Matrix.fill(iterator)(this.terrain);
-  };
-
-  addLocation = (location: Location): Id => {
-    const id = generateUnique();
-    this.locations.set(id, location);
-    return id;
-  };
-
-  getLocation = (id: Id): Location | void => {
-    return this.locations.get(id);
-  };
-}
-
-export const generate = (): World => {
-  const world = new World("Greenfield", [200, 200]);
-
-  world.fillTerrain(() => grass);
-
-  world.addLocation({
-    name: "Martin's Cavern",
-    position: [1, 1],
-    symbol: "X",
-    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
-  });
-  world.addLocation({
-    name: "Ruins of Denerin",
-    position: [10, 3],
-    symbol: "X",
-    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
-  });
-  world.addLocation({
-    name: "Raelan Creek",
-    position: [17, 23],
-    symbol: "X",
-    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
-  });
-  world.addLocation({
-    name: "Really Very Long Namesvilletown",
-    position: [45, 45],
-    symbol: "X",
-    terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
-  });
-
-  return world;
+  locations: Map<Id, Location>;
+  hero: Hero.Hero;
+  clock: Clock.Clock;
 };
 
-export default World;
+export const initial = (name: string, size: Vector2): World => ({
+  name,
+  terrain: Matrix.fromSize(size),
+  locations: new Map(),
+  hero: Hero.initial(),
+  clock: Clock.zero,
+});
+
+export const fillTerrain =
+  (iterator: (point: Vector2) => Terrain) =>
+  (world: World): World => {
+    world.terrain = Matrix.fill(iterator)(world.terrain);
+    return world;
+  };
+
+export const addLocation =
+  (location: Location) =>
+  (world: World): [World, Id] => {
+    const id = generateUnique();
+    world.locations.set(id, location);
+    return [world, id];
+  };
+
+export const getLocation =
+  (id: Id) =>
+  (world: World): Location | undefined => {
+    return world.locations.get(id);
+  };
+
+export const generate = (): World =>
+  pipe(
+    initial("Greenfield", [200, 200]),
+    fillTerrain(() => grass),
+    addLocation({
+      name: "Martin's Cavern",
+      position: [1, 1],
+      symbol: "X",
+      terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
+    }),
+    fst,
+    addLocation({
+      name: "Ruins of Denerin",
+      position: [10, 3],
+      symbol: "X",
+      terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
+    }),
+    fst,
+    addLocation({
+      name: "Raelan Creek",
+      position: [17, 23],
+      symbol: "X",
+      terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
+    }),
+    fst,
+    addLocation({
+      name: "Really Very Long Namesvilletown",
+      position: [45, 45],
+      symbol: "X",
+      terrain: Matrix.fill(() => grass)(Matrix.fromSize([40, 30])),
+    }),
+    fst,
+  );

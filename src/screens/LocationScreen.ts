@@ -2,7 +2,7 @@ import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
 import { cardinalNeighbors } from "../lib/Vector2";
 import Game from "../Game";
-import World, { Location } from "../World";
+import { World, Location } from "../World";
 import MapCameraContainer from "../UI/MapCameraContainer";
 import Screen from "./Screen";
 import PauseScreen from "./PauseScreen";

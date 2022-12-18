@@ -5,7 +5,7 @@ import { Id, Ord as idOrd } from "../lib/Id";
 import Color from "../Color";
 import Game from "../Game";
 import Menu, { Item } from "../Menu";
-import World, { Location } from "../World";
+import { World, Location } from "../World";
 import MapCameraContainer from "../UI/MapCameraContainer";
 import MenuContainer from "../UI/MenuContainer";
 import Screen from "./Screen";
