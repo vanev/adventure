@@ -1,4 +1,4 @@
-import { Duration } from "../lib/Duration";
+import { Duration } from "./lib/Duration";
 
 export type Tick = {
   sinceLast: Duration;

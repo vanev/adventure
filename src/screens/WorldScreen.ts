@@ -3,7 +3,7 @@ import { isNonEmpty, map } from "fp-ts/lib/Array";
 import { toArray } from "fp-ts/lib/Map";
 import { Id, Ord as idOrd } from "../lib/Id";
 import Color from "../Color";
-import Game from "../Game";
+import Application from "../Application";
 import Menu, { Item } from "../Menu";
 import { World, Place } from "../World";
 import MapCameraContainer from "../UI/MapCameraContainer";
@@ -13,13 +13,13 @@ import PlaceScreen from "./PlaceScreen";
 import PauseScreen from "./PauseScreen";
 
 class WorldScreen implements Screen {
-  game: Game;
+  application: Application;
   world: World;
   menu: Menu<WorldScreen>;
   locations: Array<[Id, Place]>;
 
-  constructor(game: Game, world: World) {
-    this.game = game;
+  constructor(application: Application, world: World) {
+    this.application = application;
     this.world = world;
     this.locations = pipe(world.locations, toArray(idOrd));
 
@@ -29,7 +29,9 @@ class WorldScreen implements Screen {
         ([id, location]): Item<WorldScreen> => ({
           label: location.name,
           action: (screen) => {
-            screen.game.changeScreen(new PlaceScreen(screen.game, world, id));
+            screen.application.changeScreen(
+              new PlaceScreen(screen.application, world, id),
+            );
           },
         }),
       ),
@@ -42,7 +44,7 @@ class WorldScreen implements Screen {
   }
 
   onTick = () => {
-    this.game.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
           this.menu.down();
@@ -58,17 +60,19 @@ class WorldScreen implements Screen {
           break;
 
         case "Escape":
-          this.game.changeScreen(new PauseScreen(this.game, this));
+          this.application.changeScreen(
+            new PauseScreen(this.application, this),
+          );
           break;
       }
     });
 
-    this.game.ui.display.drawText([5, 2], this.world.name);
+    this.application.ui.display.drawText([5, 2], this.world.name);
 
     const menuContainer = new MenuContainer({
       position: [3, 5],
       size: [30, 30],
-      parent: this.game.ui.display,
+      parent: this.application.ui.display,
       menu: this.menu,
     });
 
@@ -79,7 +83,7 @@ class WorldScreen implements Screen {
     const mapCameraContainer = new MapCameraContainer({
       position: [30, 2],
       size: [30, 30],
-      parent: this.game.ui.display,
+      parent: this.application.ui.display,
       map: this.world.terrain,
       focus: selectedPlace.position,
     });

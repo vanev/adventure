@@ -1,7 +1,7 @@
-import Game from "../Game";
+import Application from "../Application";
 
 interface Screen {
-  game: Game;
+  application: Application;
   onTick(): void;
 }
 

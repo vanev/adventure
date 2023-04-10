@@ -1,4 +1,4 @@
-import Game from "../Game";
+import Application from "../Application";
 import Menu from "../Menu";
 import { generate as generateWorld } from "../World";
 import MenuContainer from "../UI/MenuContainer";
@@ -6,12 +6,14 @@ import Screen from "./Screen";
 import WorldScreen from "./WorldScreen";
 
 class MainMenuScreen implements Screen {
-  game: Game;
+  application: Application;
   menu: Menu<MainMenuScreen> = new Menu([
     {
       label: "New World",
       action: (screen) => {
-        screen.game.changeScreen(new WorldScreen(screen.game, generateWorld()));
+        screen.application.changeScreen(
+          new WorldScreen(screen.application, generateWorld()),
+        );
       },
     },
     {
@@ -22,12 +24,12 @@ class MainMenuScreen implements Screen {
     },
   ]);
 
-  constructor(game: Game) {
-    this.game = game;
+  constructor(application: Application) {
+    this.application = application;
   }
 
   onTick = () => {
-    this.game.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
           this.menu.down();
@@ -44,12 +46,12 @@ class MainMenuScreen implements Screen {
       }
     });
 
-    this.game.ui.display.drawText([5, 2], "Adventure!");
+    this.application.ui.display.drawText([5, 2], "Adventure!");
 
     const menuContainer = new MenuContainer({
       position: [3, 5],
       size: [30, 30],
-      parent: this.game.ui.display,
+      parent: this.application.ui.display,
       menu: this.menu,
     });
 

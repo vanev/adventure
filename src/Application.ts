@@ -1,11 +1,10 @@
-import UI from "../UI";
-import Screen from "../screens/Screen";
-import MainMenuScreen from "../screens/MainMenuScreen";
-import * as State from "./State";
+import UI from "./UI";
+import Screen from "./screens/Screen";
+import MainMenuScreen from "./screens/MainMenuScreen";
 import * as Tick from "./Tick";
 
-class Game {
-  state: State.State = State.initial();
+class Application {
+  tick: Tick.Tick = Tick.initial();
   ui: UI;
   screen: Screen;
 
@@ -16,12 +15,12 @@ class Game {
 
   start = () => {
     const loop = () => {
-      this.state.tick = Tick.update(this.state.tick);
+      this.tick = Tick.update(this.tick);
 
       this.screen.onTick();
 
       // Debug Stuff
-      const fps = this.state.tick.fps.toFixed(0);
+      const fps = this.tick.fps.toFixed(0);
       const fpsText = `${fps}`;
       this.ui.display.drawText([96, 0], fpsText);
 
@@ -38,4 +37,4 @@ class Game {
   };
 }
 
-export default Game;
+export default Application;

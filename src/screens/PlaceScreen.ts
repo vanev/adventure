@@ -1,7 +1,7 @@
 import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
 import { cardinalNeighbors } from "../lib/Vector2";
-import Game from "../Game";
+import Application from "../Application";
 import { World, Place } from "../World";
 import MapCameraContainer from "../UI/MapCameraContainer";
 import Screen from "./Screen";
@@ -9,13 +9,13 @@ import PauseScreen from "./PauseScreen";
 import BasicContainer from "../UI/BasicContainer";
 
 class PlaceScreen implements Screen {
-  game: Game;
+  application: Application;
   world: World;
   location: Place;
   speed: number = 0;
 
-  constructor(game: Game, world: World, id: Id) {
-    this.game = game;
+  constructor(application: Application, world: World, id: Id) {
+    this.application = application;
     this.world = world;
 
     const location = world.locations.get(id);
@@ -25,14 +25,14 @@ class PlaceScreen implements Screen {
 
   onTick = () => {
     if (this.speed > 0) {
-      this.world.clock.sinceLastTick += this.game.state.tick.sinceLast;
+      this.world.clock.sinceLastTick += this.application.tick.sinceLast;
       if (this.world.clock.sinceLastTick > (1 / this.speed) * second) {
         this.world.clock.current += 1;
         this.world.clock.sinceLastTick = 0;
       }
     }
 
-    this.game.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case " ":
           this.speed = this.speed === 0 ? 1 : 0;
@@ -63,17 +63,19 @@ class PlaceScreen implements Screen {
           break;
 
         case "Escape":
-          this.game.changeScreen(new PauseScreen(this.game, this));
+          this.application.changeScreen(
+            new PauseScreen(this.application, this),
+          );
           break;
       }
     });
 
-    this.game.ui.display.drawText([5, 2], this.location.name);
+    this.application.ui.display.drawText([5, 2], this.location.name);
 
     const mapCameraContainer = new MapCameraContainer({
       position: [0, 5],
       size: [60, 34],
-      parent: this.game.ui.display,
+      parent: this.application.ui.display,
       map: this.world.terrain,
       focus: this.world.hero.position,
     });
@@ -87,7 +89,7 @@ class PlaceScreen implements Screen {
     const infoContainer = new BasicContainer({
       position: [0, 39],
       size: [60, 1],
-      parent: this.game.ui.display,
+      parent: this.application.ui.display,
     });
 
     infoContainer.drawText([0, 0], `Speed: ${this.speed}`);

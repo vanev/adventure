@@ -3,7 +3,7 @@ import tilemapSrc from "../assets/tilemap.png";
 import * as tilemapData from "../data/tilemap.json";
 
 import Color from "./Color";
-import Game from "./Game";
+import Application from "./Application";
 import Tilesheet, { Config } from "./Tilesheet";
 import UI from "./UI";
 
@@ -28,7 +28,7 @@ image.onload = () => {
 
   const ui = new UI(bodyElement, displayConfig);
 
-  const game = new Game(ui);
+  const game = new Application(ui);
 
   game.start();
 };

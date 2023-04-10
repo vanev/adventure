@@ -1,17 +1,17 @@
-import Game from "../Game";
+import Application from "../Application";
 import Menu from "../Menu";
 import MenuContainer from "../UI/MenuContainer";
 import MainMenuScreen from "./MainMenuScreen";
 import Screen from "./Screen";
 
 class PauseScreen implements Screen {
-  game: Game;
+  application: Application;
   previousScreen: Screen;
   menu: Menu<PauseScreen> = new Menu([
     {
       label: "Continue",
       action: (screen) => {
-        screen.game.changeScreen(screen.previousScreen);
+        screen.application.changeScreen(screen.previousScreen);
       },
     },
     {
@@ -23,18 +23,18 @@ class PauseScreen implements Screen {
     {
       label: "Quit to Main Menu",
       action: (screen) => {
-        screen.game.changeScreen(new MainMenuScreen(screen.game));
+        screen.application.changeScreen(new MainMenuScreen(screen.application));
       },
     },
   ]);
 
-  constructor(game: Game, previousScreen: Screen) {
-    this.game = game;
+  constructor(application: Application, previousScreen: Screen) {
+    this.application = application;
     this.previousScreen = previousScreen;
   }
 
   onTick = () => {
-    this.game.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
           this.menu.down();
@@ -51,12 +51,12 @@ class PauseScreen implements Screen {
       }
     });
 
-    this.game.ui.display.drawText([5, 2], "Paused...");
+    this.application.ui.display.drawText([5, 2], "Paused...");
 
     const menuContainer = new MenuContainer({
       position: [3, 5],
       size: [30, 30],
-      parent: this.game.ui.display,
+      parent: this.application.ui.display,
       menu: this.menu,
     });
 
