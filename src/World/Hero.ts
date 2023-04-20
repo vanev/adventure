@@ -6,6 +6,6 @@ export type Hero = {
 };
 
 export const initial = (): Hero => ({
-  symbol: "@",
+  symbol: "guy1",
   position: [0, 0],
 });

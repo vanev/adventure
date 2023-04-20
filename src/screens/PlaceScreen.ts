@@ -7,6 +7,7 @@ import MapCameraContainer from "../UI/MapCameraContainer";
 import Screen from "./Screen";
 import PauseScreen from "./PauseScreen";
 import BasicContainer from "../UI/BasicContainer";
+import Color from "../Color";
 
 class PlaceScreen implements Screen {
   application: Application;
@@ -84,6 +85,7 @@ class PlaceScreen implements Screen {
 
     mapCameraContainer.drawOnMap(this.world.hero.position, {
       key: this.world.hero.symbol,
+      background: Color.MidBlack,
     });
 
     const infoContainer = new BasicContainer({
