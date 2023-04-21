@@ -33,7 +33,7 @@ class PauseScreen implements Screen {
     this.previousScreen = previousScreen;
   }
 
-  onTick = () => {
+  update = () => {
     this.application.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":

@@ -1,10 +1,10 @@
 import UI from "./UI";
 import Screen from "./screens/Screen";
 import MainMenuScreen from "./screens/MainMenuScreen";
-import * as Tick from "./Tick";
+import Tick from "./Tick";
 
 class Application {
-  tick: Tick.Tick = Tick.initial();
+  tick: Tick = new Tick();
   ui: UI;
   screen: Screen;
 
@@ -15,16 +15,16 @@ class Application {
 
   start = () => {
     const loop = () => {
-      this.tick = Tick.update(this.tick);
+      this.tick.update();
 
-      this.screen.onTick();
+      this.screen.update(this.tick.delta);
 
       // Debug Stuff
       const fps = this.tick.fps.toFixed(0);
       const fpsText = `${fps}`;
-      this.ui.display.drawText([96, 0], fpsText);
+      this.ui.display.drawText([58, 0], fpsText);
 
-      this.ui.onTick();
+      this.ui.update();
 
       requestAnimationFrame(loop);
     };

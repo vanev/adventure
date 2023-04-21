@@ -24,9 +24,9 @@ class PlaceScreen implements Screen {
     this.location = location;
   }
 
-  onTick = () => {
+  update = (delta: number) => {
     if (this.speed > 0) {
-      this.world.clock.sinceLastTick += this.application.tick.sinceLast;
+      this.world.clock.sinceLastTick += delta;
       if (this.world.clock.sinceLastTick > (1 / this.speed) * second) {
         this.world.clock.current += 1;
         this.world.clock.sinceLastTick = 0;

@@ -1,24 +1,19 @@
 import { Duration } from "./lib/Duration";
 
-export type Tick = {
-  sinceLast: Duration;
-  last: number;
-  fps: number;
-};
+const SMOOTHING = 0.95;
 
-export const initial = (): Tick => ({
-  sinceLast: 0,
-  last: performance.now(),
-  fps: 0,
-});
+class Tick {
+  delta: Duration = 0;
+  last: number = performance.now();
+  fps: number = 0;
 
-export const update = (tick: Tick): Tick => {
-  const next = { ...tick };
-  const now = performance.now();
-  const delta = now - next.last;
-  next.sinceLast = delta;
-  next.last = now;
-  const smoothing = 0.95;
-  next.fps = next.fps * smoothing + delta * (1.0 - smoothing);
-  return next;
-};
+  update = () => {
+    const now = performance.now();
+
+    this.delta = now - this.last;
+    this.last = now;
+    this.fps = this.fps * SMOOTHING + this.delta * (1.0 - SMOOTHING);
+  };
+}
+
+export default Tick;

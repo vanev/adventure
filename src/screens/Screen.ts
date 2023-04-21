@@ -2,7 +2,7 @@ import Application from "../Application";
 
 interface Screen {
   application: Application;
-  onTick(): void;
+  update(delta: number): void;
 }
 
 export default Screen;

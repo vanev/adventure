@@ -43,7 +43,7 @@ class WorldScreen implements Screen {
     );
   }
 
-  onTick = () => {
+  update = () => {
     this.application.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":

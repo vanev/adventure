@@ -10,7 +10,7 @@ class UI {
     parent.appendChild(this.display.canvas);
   }
 
-  onTick = () => {
+  update = () => {
     this.display.render();
     this.keyboard.clear();
   };

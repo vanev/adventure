@@ -28,7 +28,7 @@ class MainMenuScreen implements Screen {
     this.application = application;
   }
 
-  onTick = () => {
+  update = () => {
     this.application.ui.keyboard.pressed.forEach((key) => {
       switch (key) {
         case "j":
