@@ -12,7 +12,6 @@ class UI {
 
   update = () => {
     this.display.render();
-    this.keyboard.clear();
   };
 }
 

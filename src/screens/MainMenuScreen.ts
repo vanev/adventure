@@ -4,6 +4,7 @@ import { generate as generateWorld } from "../World";
 import MenuContainer from "../UI/MenuContainer";
 import Screen from "./Screen";
 import WorldScreen from "./WorldScreen";
+import Key from "../lib/Key";
 
 class MainMenuScreen implements Screen {
   application: Application;
@@ -29,17 +30,17 @@ class MainMenuScreen implements Screen {
   }
 
   update = () => {
-    this.application.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((_pressedAt, key) => {
       switch (key) {
-        case "j":
+        case Key.j:
           this.menu.down();
           break;
 
-        case "k":
+        case Key.k:
           this.menu.up();
           break;
 
-        case "Enter":
+        case Key.Enter:
           const action = this.menu.action();
           action(this);
           break;

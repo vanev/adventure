@@ -1,6 +1,7 @@
 import Application from "../Application";
 import Menu from "../Menu";
 import MenuContainer from "../UI/MenuContainer";
+import Key from "../lib/Key";
 import MainMenuScreen from "./MainMenuScreen";
 import Screen from "./Screen";
 
@@ -34,17 +35,17 @@ class PauseScreen implements Screen {
   }
 
   update = () => {
-    this.application.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((_pressedAt, key) => {
       switch (key) {
-        case "j":
+        case Key.j:
           this.menu.down();
           break;
 
-        case "k":
+        case Key.k:
           this.menu.up();
           break;
 
-        case "Enter":
+        case Key.Enter:
           const action = this.menu.action();
           action(this);
           break;

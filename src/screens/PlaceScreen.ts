@@ -1,6 +1,7 @@
 import { second } from "../lib/Duration";
 import { Id } from "../lib/Id";
 import { cardinalNeighbors } from "../lib/Vector2";
+import Key from "../lib/Key";
 import Application from "../Application";
 import { World, Place } from "../World";
 import MapCameraContainer from "../UI/MapCameraContainer";
@@ -33,37 +34,37 @@ class PlaceScreen implements Screen {
       }
     }
 
-    this.application.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((_pressedAt, key) => {
       switch (key) {
-        case " ":
+        case Key.Space:
           this.speed = this.speed === 0 ? 1 : 0;
           break;
 
-        case "ArrowUp":
+        case Key.ArrowUp:
           this.world.hero.position = cardinalNeighbors(
             this.world.hero.position,
           ).North;
           break;
 
-        case "ArrowDown":
+        case Key.ArrowDown:
           this.world.hero.position = cardinalNeighbors(
             this.world.hero.position,
           ).South;
           break;
 
-        case "ArrowLeft":
+        case Key.ArrowLeft:
           this.world.hero.position = cardinalNeighbors(
             this.world.hero.position,
           ).West;
           break;
 
-        case "ArrowRight":
+        case Key.ArrowRight:
           this.world.hero.position = cardinalNeighbors(
             this.world.hero.position,
           ).East;
           break;
 
-        case "Escape":
+        case Key.Escape:
           this.application.changeScreen(
             new PauseScreen(this.application, this),
           );

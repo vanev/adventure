@@ -2,6 +2,7 @@ import { pipe } from "fp-ts/lib/function";
 import { isNonEmpty, map } from "fp-ts/lib/Array";
 import { toArray } from "fp-ts/lib/Map";
 import { Id, Ord as idOrd } from "../lib/Id";
+import Key from "../lib/Key";
 import Color from "../Color";
 import Application from "../Application";
 import Menu, { Item } from "../Menu";
@@ -44,22 +45,22 @@ class WorldScreen implements Screen {
   }
 
   update = () => {
-    this.application.ui.keyboard.pressed.forEach((key) => {
+    this.application.ui.keyboard.pressed.forEach((_pressedAt, key) => {
       switch (key) {
-        case "j":
+        case Key.j:
           this.menu.down();
           break;
 
-        case "k":
+        case Key.k:
           this.menu.up();
           break;
 
-        case "Enter":
+        case Key.Enter:
           const action = this.menu.action();
           action(this);
           break;
 
-        case "Escape":
+        case Key.Escape:
           this.application.changeScreen(
             new PauseScreen(this.application, this),
           );
