@@ -1,8 +1,7 @@
-import Application from "../Application";
+import Tick from "../Tick";
 
 interface Screen {
-  application: Application;
-  update(delta: number): void;
+  update(tick: Tick): void;
 }
 
 export default Screen;

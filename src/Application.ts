@@ -17,7 +17,7 @@ class Application {
     const loop = () => {
       this.tick.update();
 
-      this.screen.update(this.tick.delta);
+      this.screen.update(this.tick);
 
       // Debug Stuff
       const fps = this.tick.fps.toFixed(0);

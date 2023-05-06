@@ -3,6 +3,7 @@ import { Id } from "../lib/Id";
 import { cardinalNeighbors } from "../lib/Vector2";
 import Key from "../lib/Key";
 import Application from "../Application";
+import Tick from "../Tick";
 import { World, Place } from "../World";
 import MapCameraContainer from "../UI/MapCameraContainer";
 import Screen from "./Screen";
@@ -25,9 +26,9 @@ class PlaceScreen implements Screen {
     this.location = location;
   }
 
-  update = (delta: number) => {
+  update = (tick: Tick) => {
     if (this.speed > 0) {
-      this.world.clock.sinceLastTick += delta;
+      this.world.clock.sinceLastTick += tick.delta;
       if (this.world.clock.sinceLastTick > (1 / this.speed) * second) {
         this.world.clock.current += 1;
         this.world.clock.sinceLastTick = 0;
