@@ -8,7 +8,9 @@
   "author": "Evan Siegel <siegel.evan@gmail.com>",
   "scripts": {
     "start": "parcel",
-    "build": "parcel build"
+    "build": "parcel build",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/jest": "^29.2.4",
