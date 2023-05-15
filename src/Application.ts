@@ -1,23 +1,23 @@
 import UI from "./UI";
-import Screen from "./screens/Screen";
 import MainMenuScreen from "./screens/MainMenuScreen";
 import Tick from "./Tick";
+import ScreenStack from "./ScreenStack";
 
 class Application {
-  tick: Tick = new Tick();
+  tick = new Tick();
+  screens: ScreenStack;
   ui: UI;
-  screen: Screen;
 
   constructor(ui: UI) {
     this.ui = ui;
-    this.screen = new MainMenuScreen(this);
+    this.screens = new ScreenStack([new MainMenuScreen(this)]);
   }
 
   start = () => {
     const loop = () => {
       this.tick.update();
 
-      this.screen.update(this.tick);
+      this.screens.peek().update(this.tick);
 
       // Debug Stuff
       const fps = this.tick.fps.toFixed(0);
@@ -30,10 +30,6 @@ class Application {
     };
 
     loop();
-  };
-
-  changeScreen = (newScreen: Screen) => {
-    this.screen = newScreen;
   };
 }
 

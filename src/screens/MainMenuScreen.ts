@@ -1,63 +1,63 @@
-import Application from "../Application";
-import Menu from "../Menu";
-import { generate as generateWorld } from "../World";
-import MenuContainer from "../UI/MenuContainer";
-import Screen from "./Screen";
-import WorldScreen from "./WorldScreen";
-import Key from "../lib/Key";
+import Key from "~/src/lib/Key";
+import Screen from "~/src/Screen";
+import KeyMap from "~/src/KeyMap";
+import TextComponent from "~/src/components/Text";
+import PositionComponent from "~/src/components/Position";
+import SizeComponent from "~/src/components/Size";
+import PlayerCommandsComponent from "~/src/components/PlayerCommands";
+import MenuComponent from "~/src/components/Menu";
+import textRenderSystem from "~/src/systems/textRender";
+import playerInputSystem from "~/src/systems/playerInput";
+import menuRenderSystem from "~/src/systems/menuRender";
+import menuControlSystem, {
+  MenuCommand,
+  selectPreviousMenuItem,
+  selectNextMenuItem,
+  performSelectedAction,
+} from "~/src/systems/menuControl";
 
-class MainMenuScreen implements Screen {
-  application: Application;
-  menu: Menu<MainMenuScreen> = new Menu([
-    {
-      label: "New World",
-      action: (screen) => {
-        screen.application.changeScreen(
-          new WorldScreen(screen.application, generateWorld()),
-        );
-      },
-    },
-    {
-      label: "Load World",
-      action: (screen) => {
-        console.warn("Not Implemented");
-      },
-    },
-  ]);
+const keyMap: KeyMap<MenuCommand> = {
+  [Key.ArrowUp]: selectPreviousMenuItem,
+  [Key.ArrowDown]: selectNextMenuItem,
+  [Key.Enter]: performSelectedAction,
+};
 
-  constructor(application: Application) {
-    this.application = application;
-  }
+export default class MainMenuScreen extends Screen {
+  enter = () => {
+    //
+    // Systems
+    //
+    this.engine.addSystem(playerInputSystem(this.application.ui.keyboard));
+    this.engine.addSystem(menuControlSystem);
+    this.engine.addSystem(textRenderSystem(this.application.ui.display));
+    this.engine.addSystem(menuRenderSystem(this.application.ui.display));
 
-  update = () => {
-    this.application.ui.keyboard.pressed.forEach((_pressedAt, key) => {
-      switch (key) {
-        case Key.j:
-          this.menu.down();
-          break;
+    //
+    // Entities
+    //
+    const title = this.engine.createEntity();
+    title.addComponent(new TextComponent("Adventure!"));
+    title.addComponent(new PositionComponent([5, 2]));
 
-        case Key.k:
-          this.menu.up();
-          break;
-
-        case Key.Enter:
-          const action = this.menu.action();
-          action(this);
-          break;
-      }
-    });
-
-    this.application.ui.display.drawText([5, 2], "Adventure!");
-
-    const menuContainer = new MenuContainer({
-      position: [3, 5],
-      size: [30, 30],
-      parent: this.application.ui.display,
-      menu: this.menu,
-    });
-
-    menuContainer.drawMenu();
+    const menu = this.engine.createEntity();
+    menu.addComponent(
+      new MenuComponent([
+        {
+          label: "New World",
+          action: () => {
+            console.warn("Not Implemented");
+          },
+        },
+        {
+          label: "Load World",
+          action: () => {
+            console.warn("Not Implemented");
+          },
+        },
+      ]),
+    );
+    menu.addComponent(new PositionComponent([3, 5]));
+    menu.addComponent(new SizeComponent([30, 30]));
+    menu.addComponent(new PlayerCommandsComponent(keyMap));
   };
 }
-
-export default MainMenuScreen;
