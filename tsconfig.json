@@ -4,6 +4,10 @@
     "moduleResolution": "node",
     "lib": ["es2018", "dom"],
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./*"],
+    }
   }
 }
