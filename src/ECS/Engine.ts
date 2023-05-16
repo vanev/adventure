@@ -45,6 +45,8 @@ class Engine<T> implements EventEmitter<EngineEvent> {
     return this.entities.get(id);
   };
 
+  allEntities = (): Iterable<Entity> => this.entities.values();
+
   destroyEntity = (id: Id) => {
     const existed = this.entities.delete(id);
 
