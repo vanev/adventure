@@ -1,11 +1,15 @@
 import { millisecond } from "../lib/Duration";
-import { system } from "../ECS";
-import PlayerCommandComponent from "../components/PlayerCommands";
-import playerCommandQuery from "../queries/playerCommand";
+import { system, query } from "../ECS";
+import PlayerInput from "../components/PlayerInput";
+import Commands from "../components/Commands";
 import Keyboard from "../UI/Keyboard";
 import Tick from "../Tick";
 
 const REPEAT_DELAY = 200 * millisecond;
+
+const playerCommandQuery = query({
+  all: new Set([PlayerInput, Commands]),
+});
 
 const playerInput = <C>(keyboard: Keyboard) =>
   system(
@@ -13,15 +17,13 @@ const playerInput = <C>(keyboard: Keyboard) =>
     ([playerCommandResults]) =>
       ({ now, delta }: Tick) => {
         for (const [id, entity] of playerCommandResults()) {
-          const playerCommand = entity.getComponent(PlayerCommandComponent<C>);
-          const { keyMap, commands } = playerCommand.data;
+          const keyMap = entity.getComponent(PlayerInput<C>).data;
+          const commands = entity.getComponent(Commands<C>).data;
 
           for (const [key, pressedAt] of keyboard.pressed) {
             const command = keyMap[key];
 
-            if (!command) return;
-
-            if (commands.has(command)) return;
+            if (!command || commands.has(command)) continue;
 
             const timeSincePress = now - pressedAt;
 

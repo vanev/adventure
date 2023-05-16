@@ -4,7 +4,8 @@ import KeyMap from "~/src/KeyMap";
 import TextComponent from "~/src/components/Text";
 import PositionComponent from "~/src/components/Position";
 import SizeComponent from "~/src/components/Size";
-import PlayerCommandsComponent from "~/src/components/PlayerCommands";
+import PlayerInputComponent from "../components/PlayerInput";
+import CommandsComponent from "~/src/components/Commands";
 import MenuComponent from "~/src/components/Menu";
 import textRenderSystem from "~/src/systems/textRender";
 import playerInputSystem from "~/src/systems/playerInput";
@@ -58,6 +59,7 @@ export default class MainMenuScreen extends Screen {
     );
     menu.addComponent(new PositionComponent([3, 5]));
     menu.addComponent(new SizeComponent([30, 30]));
-    menu.addComponent(new PlayerCommandsComponent(keyMap));
+    menu.addComponent(new PlayerInputComponent(keyMap));
+    menu.addComponent(new CommandsComponent());
   };
 }

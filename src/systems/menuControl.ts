@@ -1,5 +1,5 @@
 import { query, system } from "../ECS";
-import PlayerCommandsComponent from "../components/PlayerCommands";
+import Commands from "../components/Commands";
 import Tick from "../Tick";
 import MenuComponent from "../components/Menu";
 
@@ -24,7 +24,7 @@ export type MenuCommand =
   | PerformSelectedAction;
 
 const menuControlQuery = query({
-  all: new Set([MenuComponent, PlayerCommandsComponent]),
+  all: new Set([MenuComponent, Commands]),
 });
 
 const menuControlSystem = system(
@@ -33,10 +33,7 @@ const menuControlSystem = system(
     (tick: Tick) => {
       for (const [id, entity] of menuControlResults()) {
         const menu = entity.getComponent(MenuComponent);
-        const playerCommand = entity.getComponent(
-          PlayerCommandsComponent<MenuCommand>,
-        );
-        const { commands } = playerCommand.data;
+        const commands = entity.getComponent(Commands<MenuCommand>).data;
 
         if (commands.has(selectNextMenuItem)) {
           menu.data.selected++;
