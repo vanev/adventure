@@ -66,7 +66,7 @@ export default class Camera<T> {
 
   *values(): Generator<T | undefined> {
     for (let point of this.points()) {
-      const value = Matrix.get<T>(this.toSubjectPoint(point))(this.subject);
+      const value = Matrix.get(this.toSubjectPoint(point))(this.subject);
 
       yield value;
     }
@@ -77,7 +77,7 @@ export default class Camera<T> {
    */
   *cells(): Generator<[Vector2, T | undefined]> {
     for (let point of this.points()) {
-      const value = Matrix.get<T>(this.toSubjectPoint(point))(this.subject);
+      const value = Matrix.get(this.toSubjectPoint(point))(this.subject);
 
       yield [point, value];
     }

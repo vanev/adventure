@@ -30,8 +30,8 @@ export const set =
   };
 
 export const get =
-  <T>(point: Vector2.Vector2) =>
-  (matrix: Matrix<T>): T | undefined =>
+  (point: Vector2.Vector2) =>
+  <T>(matrix: Matrix<T>): T | undefined =>
     matrix.cells[indexOf(point)(matrix)];
 
 export function* points<T>(matrix: Matrix<T>): Generator<Vector2.Vector2> {
@@ -46,7 +46,7 @@ export function* cells<T>(
   matrix: Matrix<T>,
 ): Generator<[Vector2.Vector2, T | undefined]> {
   for (const point of points(matrix)) {
-    yield [point, get<T>(point)(matrix)];
+    yield [point, get(point)(matrix)];
   }
 }
 
@@ -65,7 +65,7 @@ export const cardinalNeighbors =
     pipe(
       point,
       Vector2.cardinalNeighbors,
-      map((neighbor) => get<T>(neighbor)(matrix)),
+      map((neighbor) => get(neighbor)(matrix)),
     );
 
 export const ordinalNeighbors =
@@ -74,7 +74,7 @@ export const ordinalNeighbors =
     pipe(
       point,
       Vector2.ordinalNeighbors,
-      map((neighbor) => get<T>(neighbor)(matrix)),
+      map((neighbor) => get(neighbor)(matrix)),
     );
 
 export const allNeighbors =
@@ -83,5 +83,5 @@ export const allNeighbors =
     pipe(
       point,
       Vector2.allNeighbors,
-      map((neighbor) => get<T>(neighbor)(matrix)),
+      map((neighbor) => get(neighbor)(matrix)),
     );
