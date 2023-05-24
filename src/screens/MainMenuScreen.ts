@@ -16,6 +16,7 @@ import menuControlSystem, {
   selectNextMenuItem,
   performSelectedAction,
 } from "~/src/systems/menuControl";
+import GameScreen from "./GameScreen";
 
 const keyMap: KeyMap<MenuCommand> = {
   [Key.ArrowUp]: selectPreviousMenuItem,
@@ -46,7 +47,7 @@ export default class MainMenuScreen extends Screen {
         {
           label: "New World",
           action: () => {
-            console.warn("Not Implemented");
+            this.application.screens.push(new GameScreen(this.application));
           },
         },
         {
