@@ -1,7 +1,7 @@
 import { pipe } from "fp-ts/lib/function";
 import { fst } from "fp-ts/lib/Tuple";
 import { Id, generateUnique } from "../lib/Id";
-import * as Matrix from "../lib/Matrix";
+import Matrix from "../lib/Matrix";
 import Vector2 from "../lib/Vector2";
 import { Place } from "./Place";
 import { Terrain, grass } from "./Terrain";
@@ -12,7 +12,7 @@ export type { Terrain, Place };
 
 export type World = {
   name: string;
-  terrain: Matrix.Matrix<Terrain>;
+  terrain: Matrix<Terrain>;
   locations: Map<Id, Place>;
   hero: Hero.Hero;
   clock: Clock.Clock;
@@ -20,7 +20,7 @@ export type World = {
 
 export const initial = (name: string, size: Vector2): World => ({
   name,
-  terrain: Matrix.fromSize(size),
+  terrain: Matrix.fromSize<Terrain>(size),
   locations: new Map(),
   hero: Hero.initial(),
   clock: Clock.zero,
@@ -29,7 +29,7 @@ export const initial = (name: string, size: Vector2): World => ({
 export const fillTerrain =
   (iterator: (point: Vector2) => Terrain) =>
   (world: World): World => {
-    world.terrain = Matrix.fill(iterator)(world.terrain);
+    world.terrain = world.terrain.fill(iterator);
     return world;
   };
 
@@ -55,28 +55,28 @@ export const generate = (): World =>
       name: "Martin's Cavern",
       position: Vector2.from(1, 1),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
+      terrain: Matrix.fromSize<Terrain>(Vector2.from(40, 30)).fill(grass),
     }),
     fst,
     addPlace({
       name: "Ruins of Denerin",
       position: Vector2.from(10, 3),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
+      terrain: Matrix.fromSize<Terrain>(Vector2.from(40, 30)).fill(grass),
     }),
     fst,
     addPlace({
       name: "Raelan Creek",
       position: Vector2.from(17, 23),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
+      terrain: Matrix.fromSize<Terrain>(Vector2.from(40, 30)).fill(grass),
     }),
     fst,
     addPlace({
       name: "Really Very Long Namesvilletown",
       position: Vector2.from(45, 45),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
+      terrain: Matrix.fromSize<Terrain>(Vector2.from(40, 30)).fill(grass),
     }),
     fst,
   );

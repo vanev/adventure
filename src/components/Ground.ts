@@ -1,4 +1,4 @@
-import { Matrix } from "~/src/lib/Matrix";
+import Matrix from "~/src/lib/Matrix";
 import { Component } from "~/src/ECS";
 import { Terrain } from "~/src/World";
 

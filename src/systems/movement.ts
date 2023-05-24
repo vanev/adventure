@@ -1,4 +1,3 @@
-import * as Matrix from "~/src/lib/Matrix";
 import { query, system } from "~/src/ECS";
 import Tick from "~/src/Tick";
 import Position from "~/src/components/Position";
@@ -62,7 +61,7 @@ const movement = system(
 
         const updated = original.add(Vector2.from(xDelta, yDelta));
 
-        const destination = Matrix.get(updated)(ground);
+        const destination = ground.get(updated);
 
         if (!destination) {
           positionComponent.data = original;

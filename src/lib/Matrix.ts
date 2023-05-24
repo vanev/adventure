@@ -3,82 +3,69 @@ import { map } from "fp-ts/lib/Record";
 import Vector2 from "./Vector2";
 import { Cardinal, Ordinal, Direction } from "./Direction";
 
-export type Matrix<T> = {
-  width: number;
-  height: number;
-  cells: Array<T>;
-};
+export default class Matrix<T> {
+  readonly width: number;
+  readonly height: number;
+  private values: Array<T> = [];
 
-export const fromSize = <T>({ x, y }: Vector2): Matrix<T> => ({
-  width: x,
-  height: y,
-  cells: [],
-});
+  constructor(width: number, height: number) {
+    this.width = width;
+    this.height = height;
+  }
 
-const indexOf =
-  ({ x, y }: Vector2) =>
-  <T>(matrix: Matrix<T>) => {
-    if (x < 0 || x >= matrix.width || y < 0 || y >= matrix.height) return -1;
-    return x + y * matrix.width;
+  static fromSize = <V>({ x, y }: Vector2): Matrix<V> => new Matrix<V>(x, y);
+
+  indexOf = ({ x, y }: Vector2): number => {
+    if (x < 0 || x >= this.width || y < 0 || y >= this.height) return -1;
+    return x + y * this.width;
   };
 
-export const set =
-  <T>(point: Vector2, value: T) =>
-  (matrix: Matrix<T>): Matrix<T> => {
-    matrix.cells[indexOf(point)(matrix)] = value;
-    return matrix;
+  set = (point: Vector2, value: T): Matrix<T> => {
+    const index = this.indexOf(point);
+
+    if (index === -1) throw new Error(`${point} is out of bounds.`);
+
+    this.values[this.indexOf(point)] = value;
+
+    return this;
   };
 
-export const get =
-  (point: Vector2) =>
-  <T>(matrix: Matrix<T>): T | undefined =>
-    matrix.cells[indexOf(point)(matrix)];
+  get = (point: Vector2): T | undefined => {
+    const index = this.indexOf(point);
 
-export function* points<T>(matrix: Matrix<T>): Generator<Vector2> {
-  for (let x = 0; x < matrix.width; x++) {
-    for (let y = 0; y < matrix.height; y++) {
-      yield Vector2.from(x, y);
+    if (index === -1) throw new Error(`${point} is out of bounds.`);
+
+    return this.values[index];
+  };
+
+  *points(): Generator<Vector2> {
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
+        yield Vector2.from(x, y);
+      }
     }
   }
-}
 
-export function* cells<T>(
-  matrix: Matrix<T>,
-): Generator<[Vector2, T | undefined]> {
-  for (const point of points(matrix)) {
-    yield [point, get(point)(matrix)];
-  }
-}
-
-export const fill =
-  <T>(iterator: (point: Vector2) => T) =>
-  (matrix: Matrix<T>): Matrix<T> => {
-    for (const point of points(matrix)) {
-      set(point, iterator(point))(matrix);
+  *cells(): Generator<[Vector2, T | undefined]> {
+    for (const point of this.points()) {
+      yield [point, this.get(point)];
     }
-    return matrix;
+  }
+
+  fill = (iterator: (point: Vector2) => T): Matrix<T> => {
+    for (const point of this.points()) {
+      this.set(point, iterator(point));
+    }
+
+    return this;
   };
 
-export const cardinalNeighbors =
-  <T>(point: Vector2) =>
-  (matrix: Matrix<T>): Record<Cardinal, T | undefined> =>
-    pipe(
-      point.cardinalNeighbors(),
-      map((neighbor) => get(neighbor)(matrix)),
-    );
+  cardinalNeighbors = (point: Vector2): Record<Cardinal, T | undefined> =>
+    pipe(point.cardinalNeighbors(), map(this.get));
 
-export const ordinalNeighbors =
-  <T>(point: Vector2) =>
-  (matrix: Matrix<T>): Record<Ordinal, T | undefined> =>
-    pipe(
-      point.ordinalNeighbors(),
-      map((neighbor) => get(neighbor)(matrix)),
-    );
+  ordinalNeighbors = (point: Vector2): Record<Ordinal, T | undefined> =>
+    pipe(point.ordinalNeighbors(), map(this.get));
 
-export const allNeighbors =
-  <T>(point: Vector2) =>
-  (matrix: Matrix<T>): Record<Direction, T | undefined> =>
-    pipe(
-      point.allNeighbors(),
-      map((neighbor) => get(neighbor)(matrix)),
-    );
+  allNeighbors = (point: Vector2): Record<Direction, T | undefined> =>
+    pipe(point.allNeighbors(), map(this.get));
+}

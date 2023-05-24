@@ -1,4 +1,4 @@
-import * as Matrix from "~/src/lib/Matrix";
+import Matrix from "~/src/lib/Matrix";
 import Vector2 from "~/src/lib/Vector2";
 import { query, system } from "~/src/ECS";
 import Display from "~/src/UI/Display";
@@ -82,8 +82,8 @@ export default class GameScreen extends Screen {
     this.engine.addSystem(this.mapRenderSystem);
     this.engine.addSystem(movement);
 
-    const terrain: Matrix.Matrix<Terrain> = Matrix.fill(grass)(
-      Matrix.fromSize(Vector2.from(200, 200)),
+    const terrain = Matrix.fromSize<Terrain>(Vector2.from(200, 200)).fill(
+      grass,
     );
 
     const location = this.engine.createEntity();
