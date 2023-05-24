@@ -1,3 +1,4 @@
+import Vector2 from "../lib/Vector2";
 import { query, system } from "../ECS";
 import Display from "../UI/Display";
 import BasicContainer from "../UI/BasicContainer";
@@ -24,10 +25,10 @@ const menuRenderSystem = (display: Display) =>
       });
 
       menu.data.items.forEach((item, index) => {
-        container.drawText([2, index], item.label);
+        container.drawText(Vector2.from(2, index), item.label);
 
         if (menu.data.selected === index) {
-          container.draw([0, index], { key: "X" });
+          container.draw(Vector2.from(0, index), { key: "X" });
         }
       });
     }

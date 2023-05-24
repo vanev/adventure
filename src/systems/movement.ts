@@ -32,33 +32,35 @@ const movement = system(
       for (const [id, entity] of movementResults()) {
         const commands = entity.getComponent(Commands<MovementCommand>).data;
         const positionComponent = entity.getComponent(Position);
-        const [x, y] = positionComponent.data;
+        const original = positionComponent.data;
         const location = entity.getComponent(Location).data;
 
         const ground = location.getComponent(Ground).data;
 
-        const original: Vector2 = [x, y];
-        const updated: Vector2 = [x, y];
+        let xDelta = 0;
+        let yDelta = 0;
 
         if (commands.has(moveNorth)) {
-          updated[1] -= 1;
+          yDelta -= 1;
           commands.delete(moveNorth);
         }
 
         if (commands.has(moveSouth)) {
-          updated[1] += 1;
+          yDelta += 1;
           commands.delete(moveSouth);
         }
 
         if (commands.has(moveEast)) {
-          updated[0] += 1;
+          xDelta += 1;
           commands.delete(moveEast);
         }
 
         if (commands.has(moveWest)) {
-          updated[0] -= 1;
+          xDelta -= 1;
           commands.delete(moveWest);
         }
+
+        const updated = original.add(Vector2.from(xDelta, yDelta));
 
         const destination = Matrix.get(updated)(ground);
 

@@ -1,4 +1,5 @@
 import Key from "~/src/lib/Key";
+import Vector2 from "~/src/lib/Vector2";
 import Screen from "~/src/Screen";
 import KeyMap from "~/src/KeyMap";
 import TextComponent from "~/src/components/Text";
@@ -39,7 +40,7 @@ export default class MainMenuScreen extends Screen {
     //
     const title = this.engine.createEntity();
     title.addComponent(new TextComponent("Adventure!"));
-    title.addComponent(new PositionComponent([5, 2]));
+    title.addComponent(new PositionComponent(Vector2.from(5, 2)));
 
     const menu = this.engine.createEntity();
     menu.addComponent(
@@ -58,8 +59,8 @@ export default class MainMenuScreen extends Screen {
         },
       ]),
     );
-    menu.addComponent(new PositionComponent([3, 5]));
-    menu.addComponent(new SizeComponent([30, 30]));
+    menu.addComponent(new PositionComponent(Vector2.from(3, 5)));
+    menu.addComponent(new SizeComponent(Vector2.from(30, 30)));
     menu.addComponent(new PlayerInputComponent(keyMap));
     menu.addComponent(new CommandsComponent());
   };

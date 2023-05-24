@@ -1,3 +1,4 @@
+import Vector2 from "./lib/Vector2";
 import UI from "./UI";
 import MainMenuScreen from "./screens/MainMenuScreen";
 import Tick from "./Tick";
@@ -22,7 +23,7 @@ class Application {
       // Debug Stuff
       const fps = this.tick.fps.toFixed(0);
       const fpsText = `${fps}`;
-      this.ui.display.drawText([58, 0], fpsText);
+      this.ui.display.drawText(Vector2.from(58, 0), fpsText);
 
       this.ui.update();
 

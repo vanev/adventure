@@ -49,34 +49,34 @@ export const getPlace =
 
 export const generate = (): World =>
   pipe(
-    initial("Greenfield", [200, 200]),
+    initial("Greenfield", Vector2.from(200, 200)),
     fillTerrain(grass),
     addPlace({
       name: "Martin's Cavern",
-      position: [1, 1],
+      position: Vector2.from(1, 1),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize([40, 30])),
+      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
     }),
     fst,
     addPlace({
       name: "Ruins of Denerin",
-      position: [10, 3],
+      position: Vector2.from(10, 3),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize([40, 30])),
+      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
     }),
     fst,
     addPlace({
       name: "Raelan Creek",
-      position: [17, 23],
+      position: Vector2.from(17, 23),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize([40, 30])),
+      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
     }),
     fst,
     addPlace({
       name: "Really Very Long Namesvilletown",
-      position: [45, 45],
+      position: Vector2.from(45, 45),
       symbol: "X",
-      terrain: Matrix.fill(grass)(Matrix.fromSize([40, 30])),
+      terrain: Matrix.fill(grass)(Matrix.fromSize(Vector2.from(40, 30))),
     }),
     fst,
   );

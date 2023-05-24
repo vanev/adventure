@@ -1,16 +1,17 @@
+import Vector2 from "./lib/Vector2";
 import * as Matrix from "./lib/Matrix";
 import Camera from "./Camera";
 
 describe("Camera", () => {
   it("works in the middle", () => {
-    const subject = Matrix.fill(([x, y]) => `${x}${y}`)(
-      Matrix.fromSize([10, 5]),
+    const subject = Matrix.fill(({ x, y }) => `${x}${y}`)(
+      Matrix.fromSize(Vector2.from(10, 5)),
     );
 
     const camera = new Camera({
       subject,
-      size: [3, 3],
-      focus: [2, 2],
+      size: Vector2.from(3, 3),
+      focus: Vector2.from(2, 2),
     });
 
     const actual = Array.from(camera.values());
@@ -20,14 +21,14 @@ describe("Camera", () => {
   });
 
   it("works in the top left corner", () => {
-    const subject = Matrix.fill(([x, y]) => `${x}${y}`)(
-      Matrix.fromSize([10, 5]),
+    const subject = Matrix.fill(({ x, y }) => `${x}${y}`)(
+      Matrix.fromSize(Vector2.from(10, 5)),
     );
 
     const camera = new Camera({
       subject,
-      size: [3, 3],
-      focus: [0, 0],
+      size: Vector2.from(3, 3),
+      focus: Vector2.from(0, 0),
     });
 
     const actual = Array.from(camera.values());
@@ -37,14 +38,14 @@ describe("Camera", () => {
   });
 
   it("works in the bottom right corner", () => {
-    const subject = Matrix.fill(([x, y]) => `${x}${y}`)(
-      Matrix.fromSize([10, 5]),
+    const subject = Matrix.fill(({ x, y }) => `${x}${y}`)(
+      Matrix.fromSize(Vector2.from(10, 5)),
     );
 
     const camera = new Camera({
       subject,
-      size: [3, 3],
-      focus: [9, 4],
+      size: Vector2.from(3, 3),
+      focus: Vector2.from(9, 4),
     });
 
     const actual = Array.from(camera.values());

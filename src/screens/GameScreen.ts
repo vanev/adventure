@@ -1,4 +1,5 @@
 import * as Matrix from "~/src/lib/Matrix";
+import Vector2 from "~/src/lib/Vector2";
 import { query, system } from "~/src/ECS";
 import Display from "~/src/UI/Display";
 import Tick from "~/src/Tick";
@@ -82,7 +83,7 @@ export default class GameScreen extends Screen {
     this.engine.addSystem(movement);
 
     const terrain: Matrix.Matrix<Terrain> = Matrix.fill(grass)(
-      Matrix.fromSize([200, 200]),
+      Matrix.fromSize(Vector2.from(200, 200)),
     );
 
     const location = this.engine.createEntity();
@@ -91,14 +92,14 @@ export default class GameScreen extends Screen {
     const playerCharacter = this.engine.createEntity();
     playerCharacter.addComponent(new CameraFocus());
     playerCharacter.addComponent(new Location(location));
-    playerCharacter.addComponent(new Position([1, 1]));
+    playerCharacter.addComponent(new Position(Vector2.from(1, 1)));
     playerCharacter.addComponent(new Renderable("guy1"));
     playerCharacter.addComponent(new PlayerInput(keyMap));
     playerCharacter.addComponent(new Commands());
 
     const camera = this.engine.createEntity();
     camera.addComponent(new Location(location));
-    camera.addComponent(new Position([0, 0]));
-    camera.addComponent(new Size([50, 30]));
+    camera.addComponent(new Position(Vector2.from(0, 0)));
+    camera.addComponent(new Size(Vector2.from(50, 30)));
   };
 }

@@ -26,7 +26,7 @@ class CanvasRenderer implements Renderer {
   }
 
   draw = (
-    [x, y]: Vector2,
+    { x, y }: Vector2,
     { key, background = this.backgroundColor }: RenderPlan,
   ) => {
     this.context.fillStyle = background;
@@ -39,7 +39,7 @@ class CanvasRenderer implements Renderer {
 
     const source = this.tilesheet.findTile(key);
     if (source) {
-      const [sourceX, sourceY] = source;
+      const { x: sourceX, y: sourceY } = source;
 
       this.context.drawImage(
         this.tilesheet.image,

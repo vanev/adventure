@@ -2,7 +2,7 @@ import * as Matrix from "./lib/Matrix";
 import { range } from "./lib/Number";
 import { clamp } from "./lib/Range";
 import * as Rectangle from "./lib/Rectangle";
-import Vector2, { add, subtract } from "./lib/Vector2";
+import Vector2 from "./lib/Vector2";
 
 export type Config<T> = {
   subject: Matrix.Matrix<T>;
@@ -20,8 +20,8 @@ export default class Camera<T> {
   constructor({ subject, size, focus }: Config<T>) {
     this.subject = subject;
 
-    const [width, height] = size;
-    const [focusX, focusY] = focus;
+    const { x: width, y: height } = size;
+    const { x: focusX, y: focusY } = focus;
 
     const originX = Math.ceil(focusX - (width - 1) / 2);
     const originY = Math.ceil(focusY - (height - 1) / 2);
@@ -29,7 +29,10 @@ export default class Camera<T> {
     const rangeX = range(0, this.subject.width - width);
     const rangeY = range(0, this.subject.height - height);
 
-    const origin: Vector2 = [clamp(originX)(rangeX), clamp(originY)(rangeY)];
+    const origin: Vector2 = Vector2.from(
+      clamp(originX)(rangeX),
+      clamp(originY)(rangeY),
+    );
 
     this.frame = Rectangle.rectangle(origin, size);
   }
@@ -44,22 +47,22 @@ export default class Camera<T> {
    * Converts a point in the subject to it's corresponding point in the camera.
    */
   toCameraPoint = (subjectPoint: Vector2): Vector2 =>
-    subtract(subjectPoint, this.frame.origin);
+    subjectPoint.subtract(this.frame.origin);
 
   /**
    * Converts a point in the camera to it's corresponding point in the subject.
    */
   toSubjectPoint = (cameraPoint: Vector2): Vector2 =>
-    add(this.frame.origin, cameraPoint);
+    this.frame.origin.add(cameraPoint);
 
   /**
    * Yields each point in the camera's view (not the corresponding points in the subject).
    */
   *points(): Generator<Vector2> {
-    const [width, height] = this.frame.size;
+    const { x: width, y: height } = this.frame.size;
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
-        yield [x, y];
+        yield Vector2.from(x, y);
       }
     }
   }

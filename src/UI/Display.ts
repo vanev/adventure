@@ -61,10 +61,10 @@ class Display implements Renderer, TextRenderer {
     this.virtualRenderer.draw(point, plan);
   };
 
-  drawText = ([x, y]: Vector2, content: string) => {
+  drawText = (point: Vector2, content: string) => {
     const characters = content.split("");
     for (let i = 0; i < characters.length; i++) {
-      this.draw([x + i, y], {
+      this.draw(point.add(Vector2.from(i, 0)), {
         key: characters[i].toUpperCase(),
         background: this.background,
       });

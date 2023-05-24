@@ -1,5 +1,5 @@
 import * as Rectangle from "../lib/Rectangle";
-import Vector2, { add } from "../lib/Vector2";
+import Vector2 from "../lib/Vector2";
 import RenderPlan from "./RenderPlan";
 import Container from "./Container";
 
@@ -19,14 +19,14 @@ export default class BasicContainer implements Container {
   }
 
   draw(point: Vector2, plan: RenderPlan): void {
-    const actual = add(point, this.bounds.origin);
+    const actual = point.add(this.bounds.origin);
     if (!Rectangle.contains(actual)(this.bounds)) return;
 
     this.parent.draw(actual, plan);
   }
 
   drawText(point: Vector2, content: string): void {
-    const actual = add(point, this.bounds.origin);
+    const actual = point.add(this.bounds.origin);
     if (!Rectangle.contains(actual)(this.bounds)) return;
 
     this.parent.drawText(actual, content);

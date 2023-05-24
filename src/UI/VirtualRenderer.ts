@@ -1,44 +1,39 @@
-import Vector2, { fromKey, toKey } from "../lib/Vector2";
+import Vector2 from "../lib/Vector2";
 import Renderer from "./Renderer";
 import RenderPlan, { equals, removePlan } from "./RenderPlan";
 
 class VirtualRenderer implements Renderer {
-  current: Record<string, RenderPlan> = {};
-  changes: Record<string, RenderPlan> = {};
-  removals: Set<string> = new Set();
+  current: Map<Vector2, RenderPlan> = new Map();
+  changes: Map<Vector2, RenderPlan> = new Map();
+  removals: Set<Vector2> = new Set();
 
   draw = (point: Vector2, plan: RenderPlan) => {
-    const key = toKey(point);
-    this.removals.delete(key);
+    this.removals.delete(point);
 
-    const currentPlan = this.current[key];
+    const currentPlan = this.current.get(point);
 
     if (currentPlan && equals(plan, currentPlan)) {
-      delete this.changes[key];
+      this.changes.delete(point);
     } else {
-      this.changes[key] = plan;
+      this.changes.set(point, plan);
     }
   };
 
   commitTo = (actual: Renderer) => {
-    for (const key of this.removals) {
-      const point = fromKey(key);
-
+    for (const point of this.removals) {
       actual.draw(point, removePlan);
 
-      delete this.current[key];
+      this.current.delete(point);
     }
 
-    for (const [key, plan] of Object.entries(this.changes)) {
-      const point = fromKey(key);
-
+    for (const [point, plan] of this.changes) {
       actual.draw(point, plan);
 
-      this.current[key] = plan;
-      delete this.changes[key];
+      this.current.set(point, plan);
+      this.changes.delete(point);
     }
 
-    this.removals = new Set(Object.keys(this.current));
+    this.removals = new Set(this.current.keys());
   };
 }
 

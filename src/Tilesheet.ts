@@ -6,7 +6,7 @@ export type Config = {
   tileGap: number;
   columns: number;
   rows: number;
-  tiles: Record<string, Vector2>;
+  tiles: Record<string, [number, number]>;
 };
 
 class Tilesheet {
@@ -46,16 +46,16 @@ class Tilesheet {
     this.config = config;
   }
 
-  findTile = (key: string): Vector2 | void => {
+  findTile = (key: string): Vector2 | undefined => {
     const source = this.tiles[key];
     if (!source) return undefined;
 
     const [x, y] = source;
 
-    return [
+    return Vector2.from(
       x * this.tileWidth + this.tileGap,
       y * this.tileHeight + this.tileGap,
-    ];
+    );
   };
 }
 

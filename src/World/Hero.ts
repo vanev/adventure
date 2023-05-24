@@ -1,4 +1,4 @@
-import { Vector2 } from "../lib/Vector2";
+import Vector2 from "../lib/Vector2";
 
 export type Hero = {
   symbol: string;
@@ -7,5 +7,5 @@ export type Hero = {
 
 export const initial = (): Hero => ({
   symbol: "guy1",
-  position: [0, 0],
+  position: Vector2.from(0, 0),
 });
