@@ -30,7 +30,15 @@ class Entity implements EventEmitter<EntityEvent> {
   getComponent = <C extends Component<unknown>>(
     clazz: ComponentClass<C>,
   ): C => {
-    return this.components.get(clazz) as C;
+    const component = this.components.get(clazz);
+
+    if (!component)
+      throw new Error(`Cannot get ${clazz.name} for entity ${this.id}.`);
+
+    if (!(component instanceof clazz))
+      throw new Error(`Incorrect class for ${component}.`);
+
+    return component;
   };
 
   hasComponent = (clazz: Function): boolean => {
