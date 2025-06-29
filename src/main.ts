@@ -1,5 +1,4 @@
-// @ts-expect-error
-import tilemapSrc from "../assets/tilemap.png";
+import tilemapSrc from "url:../assets/tilemap.png";
 import * as tilemapData from "../data/tilemap.json";
 
 import Color from "./Color";
