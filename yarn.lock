@@ -2089,10 +2089,10 @@ find-up@^4.0.0, find-up@^4.1.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
-fp-ts@^2.12.1:
-  version "2.12.1"
-  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.12.1.tgz#e389488bfd1507af06bd5965e97367edcd4fabad"
-  integrity sha512-oxvgqUYR6O9VkKXrxkJ0NOyU0FrE705MeqgBUMEPWyTu6Pwn768cJbHChw2XOBlgFLKfIHxjr2OOBFpv2mUGZw==
+fp-ts@^2.16.10:
+  version "2.16.10"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.16.10.tgz#829b82a46571c2dc202bed38a9c2eeec603e38c4"
+  integrity sha512-vuROzbNVfCmUkZSUbnWSltR1sbheyQbTzug7LB/46fEa1c0EucLeBaCEUE0gF3ZGUGBt9lVUiziGOhhj6K1ORA==
 
 fs.realpath@^1.0.0:
   version "1.0.0"
